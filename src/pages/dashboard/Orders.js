@@ -7,6 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
+import moment from 'moment';
 
 // Generate Order Data
 function createData(id, date, name, action, quantity, amount, price, profit) {
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Orders() {
+export default function Orders(props) {
   const classes = useStyles();
   return (
     <React.Fragment>
@@ -49,10 +50,10 @@ export default function Orders() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {props.trades.map((row) => (
             <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.name}</TableCell>
+              <TableCell>{moment(row.buyDate).format('d MMM, yyyy')}</TableCell>
+              <TableCell>{row.scripName}</TableCell>
               <TableCell>{row.action}</TableCell>
               <TableCell>{row.quantity}</TableCell>
               <TableCell>{row.price}</TableCell>

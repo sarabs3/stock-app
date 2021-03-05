@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -22,6 +22,10 @@ import Chart from './Chart';
 import Deposits from './Deposits';
 import Orders from './Orders';
 import AppLayout from '../../components/layout/AppLayout';
+
+import { DataStore } from '@aws-amplify/datastore';
+import { Trades } from '../../models';
+import { useState } from 'react';
 
 function Copyright() {
   return (
@@ -120,6 +124,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+  const [trades, updateTrades] = useState([]);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -127,6 +132,14 @@ export default function Dashboard() {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  useEffect(
+      async () => {
+        const models = await DataStore.query(Trades);
+        updateTrades(models);
+        console.log('models', models);
+      },
+      []
+  );
 
   return (
     <AppLayout pageName="Dashboard">
@@ -147,7 +160,7 @@ export default function Dashboard() {
             {/* Recent Orders */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <Orders />
+                <Orders trades={trades} />
               </Paper>
             </Grid>
           </Grid>
