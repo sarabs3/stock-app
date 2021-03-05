@@ -6,25 +6,8 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Title from './Title';
+import Title from '../../components/Title';
 import moment from 'moment';
-
-// Generate Order Data
-function createData(id, date, name, action, quantity, amount, price, profit) {
-  return { id, date, name, action, quantity, amount, price, profit };
-}
-
-const rows = [
-  createData(0, '16 Mar, 2019', 'TCS', 'Buy', '100', 312.44, 100, 1000),
-  createData(1, '16 Mar, 2019', 'Sun Pharma', 'Buy', '150', 866.99, 100, 1000),
-  createData(2, '16 Mar, 2019', 'SBI', 'Sell', '200', 100.81, 100, 1000),
-  createData(3, '16 Mar, 2019', 'HCL Tech', 'Sell', '120', 654.39, 100, 1000),
-  createData(4, '15 Mar, 2019', 'Tata Motors', 'Sell', '40', 212.79, 100, 1000),
-];
-
-function preventDefault(event) {
-  event.preventDefault();
-}
 
 const useStyles = makeStyles((theme) => ({
   seeMore: {
