@@ -1,11 +1,10 @@
-import Navigation from "../../components/navigation/Index";
+import AppLayout from "../../components/layout/AppLayout";
 
 const Trades = () => {
     return (
-        <div>
-        <Navigation />
-        <h4>Trades</h4>
-        </div>
+        <AppLayout pageName="Trades">
+            <h4>Trades</h4>
+        </AppLayout>
     )
 }
 

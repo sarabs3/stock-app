@@ -1,0 +1,16 @@
+enum TradeActions {
+  BUY
+  SELL
+}
+
+type Trades @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  scripName: String
+  quantity: Int
+  price: Float
+  amount: Float
+  buyDate: AWSDateTime
+  sellDate: AWSDateTime
+  profit: Float
+  action: TradeActions
+}
