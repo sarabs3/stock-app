@@ -1,0 +1,26 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-stockbookkeepingapp-dev-231202-authRole",
+      "UnauthRoleArn": "arn:aws:iam::639520688464:role/amplify-stockbookkeepingapp-dev-231202-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::639520688464:role/amplify-stockbookkeepingapp-dev-231202-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-stockbookkeepingapp-dev-231202-deployment",
+      "UnauthRoleName": "amplify-stockbookkeepingapp-dev-231202-unauthRole",
+      "StackName": "amplify-stockbookkeepingapp-dev-231202",
+      "StackId": "arn:aws:cloudformation:us-east-1:639520688464:stack/amplify-stockbookkeepingapp-dev-231202/b417fac0-b4db-11eb-ab4d-0a9611168841",
+      "AmplifyAppId": "d1ud1y4qx8ooqm"
+    },
+    "categories": {
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d1ud1y4qx8ooqm",
+          "type": "cicd"
+        }
+      },
+      "auth": {
+        "stockbookkeepingappdd0aedf1": {}
+      }
+    }
+  }
+}

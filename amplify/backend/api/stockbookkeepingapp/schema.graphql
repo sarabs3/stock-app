@@ -1,0 +1,6 @@
+type Scrips @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  symbol: String
+  name: String
+  sector: String
+}
