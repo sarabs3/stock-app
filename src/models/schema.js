@@ -1,7 +1,7 @@
 export const schema = {
     "models": {
-        "Trades": {
-            "name": "Trades",
+        "Scrips": {
+            "name": "Scrips",
             "fields": {
                 "id": {
                     "name": "id",
@@ -10,67 +10,30 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "scripName": {
-                    "name": "scripName",
+                "symbol": {
+                    "name": "symbol",
                     "isArray": false,
                     "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
-                "quantity": {
-                    "name": "quantity",
+                "name": {
+                    "name": "name",
                     "isArray": false,
-                    "type": "Int",
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
-                "price": {
-                    "name": "price",
+                "sector": {
+                    "name": "sector",
                     "isArray": false,
-                    "type": "Float",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "amount": {
-                    "name": "amount",
-                    "isArray": false,
-                    "type": "Float",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "buyDate": {
-                    "name": "buyDate",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "sellDate": {
-                    "name": "sellDate",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "profit": {
-                    "name": "profit",
-                    "isArray": false,
-                    "type": "Float",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "action": {
-                    "name": "action",
-                    "isArray": false,
-                    "type": {
-                        "enum": "TradeActions"
-                    },
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 }
             },
             "syncable": true,
-            "pluralName": "Trades",
+            "pluralName": "Scrips",
             "attributes": [
                 {
                     "type": "model",
@@ -95,15 +58,7 @@ export const schema = {
             ]
         }
     },
-    "enums": {
-        "TradeActions": {
-            "name": "TradeActions",
-            "values": [
-                "BUY",
-                "SELL"
-            ]
-        }
-    },
+    "enums": {},
     "nonModels": {},
-    "version": "087f51e58989b7234e97fa61fcc2f87d"
+    "version": "b38a1a9b6b535ba9721af5a5b99ace00"
 };

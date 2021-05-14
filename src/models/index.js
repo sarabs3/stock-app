@@ -2,14 +2,10 @@
 import { initSchema } from '@aws-amplify/datastore';
 import { schema } from './schema';
 
-const TradeActions = {
-  "BUY": "BUY",
-  "SELL": "SELL"
-};
 
-const { Trades } = initSchema(schema);
+
+const { Scrips } = initSchema(schema);
 
 export {
-  Trades,
-  TradeActions
+  Scrips
 };

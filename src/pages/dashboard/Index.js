@@ -24,7 +24,7 @@ import Orders from './Orders';
 import AppLayout from '../../components/layout/AppLayout';
 
 import { DataStore } from '@aws-amplify/datastore';
-import { Trades } from '../../models';
+// import { Trades } from '../../models';
 import { useState } from 'react';
 
 function Copyright() {
@@ -134,9 +134,9 @@ export default function Dashboard() {
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   useEffect(
       async () => {
-        const models = await DataStore.query(Trades);
-        updateTrades(models);
-        console.log('models', models);
+        // const models = await DataStore.query(Trades);
+        // updateTrades(models);
+        // console.log('models', models);
       },
       []
   );

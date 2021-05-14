@@ -31,5 +31,11 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Open Positions" />
     </ListItem>
+    <ListItem button component={Link} to="scrips/add">
+      <ListItemIcon>
+        <PeopleIcon />
+      </ListItemIcon>
+      <ListItemText primary="Add Scrip" />
+    </ListItem>
   </div>
 );

@@ -12,7 +12,7 @@ import Paper from '@material-ui/core/Paper';
 import Title from '../../components/Title';
 import moment from 'moment';
 import { DataStore } from '@aws-amplify/datastore';
-import { Trades } from '../../models';
+// import { Trades } from '../../models';
 import { Modal } from '@material-ui/core';
 const TradesComponent = () => {
     const [open, handleOpen] = useState(false);
@@ -31,8 +31,8 @@ const TradesComponent = () => {
     ]);
     useEffect(() => {
         async function fetchData() {
-        const models = await DataStore.query(Trades);
-        console.log("models", models)
+        // const models = await DataStore.query(Trades);
+        // console.log("models", models)
         // updateTrades(models);
         }
         fetchData()

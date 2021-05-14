@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -14,6 +15,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems } from '../listItems';
+import { Auth } from 'aws-amplify'
+import { Button } from '@material-ui/core';
 
 
 const drawerWidth = 240;
@@ -100,6 +103,8 @@ const useStyles = makeStyles((theme) => ({
 
 
 const AppLayout = (props) => {
+  const history = useHistory();
+  
     const classes = useStyles();
     const [open, setOpen] = useState(true);
     const handleDrawerOpen = () => {
@@ -108,6 +113,10 @@ const AppLayout = (props) => {
     const handleDrawerClose = () => {
       setOpen(false);
     };
+    const signOut = async () => {
+      await Auth.signOut();
+      history.push("/")
+    }
     return (
     <div className={classes.root}>
         <CssBaseline />
@@ -130,6 +139,7 @@ const AppLayout = (props) => {
                 <NotificationsIcon />
             </Badge>
             </IconButton>
+            <Button variant="text" color="default" onClick={signOut}>Sign out</Button>
         </Toolbar>
         </AppBar>
         <Drawer
