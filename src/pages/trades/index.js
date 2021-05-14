@@ -12,9 +12,9 @@ import Paper from '@material-ui/core/Paper';
 import Title from '../../components/Title';
 import moment from 'moment';
 import { DataStore } from '@aws-amplify/datastore';
-// import { Trades } from '../../models';
+import { UserTrades } from '../../models';
 import { Modal } from '@material-ui/core';
-const TradesComponent = () => {
+const TradesComponent = (props) => {
     const [open, handleOpen] = useState(false);
     const [trades, updateTrades] = useState([
         {
@@ -29,13 +29,16 @@ const TradesComponent = () => {
             profit: "",
         }
     ]);
+    
+    const fetchTrades = async () => {
+        const models = await DataStore.query(UserTrades);
+        return models;
+    }
     useEffect(() => {
-        async function fetchData() {
-        // const models = await DataStore.query(Trades);
-        // console.log("models", models)
-        // updateTrades(models);
-        }
-        fetchData()
+        fetchTrades().then(data => {
+            console.log("data data", data)
+            updateTrades([...data])
+        });
     }, []);
 const classes = {}
 const body = (
@@ -49,7 +52,6 @@ const body = (
     return (
         <AppLayout pageName="Trades">
             <Container maxWidth="lg" className={classes.container}>
-            
             <Modal
             open={open}
             onClose={() => handleOpen(false)}
@@ -61,7 +63,7 @@ const body = (
                     <Grid item xs={12} md={8} lg={9}>
                         <Paper>
                             <Title>Recent Trades</Title>
-                            <Button onClick={() => handleOpen(true)} variant="contained" color="primary">Add Trade</Button>
+                            <Button onClick={() => props.history.push("/trade/add")} variant="contained" color="primary">Add Trade</Button>
                             <Table size="small">
                                 <TableHead>
                                 <TableRow>
@@ -72,21 +74,21 @@ const body = (
                                     <TableCell>Buy Price</TableCell>
                                     <TableCell>Targets</TableCell>
                                     <TableCell>Total Amount</TableCell>
-                                    <TableCell>Profit</TableCell>
+                                    <TableCell>Expected Profit</TableCell>
                                     <TableCell align="right">&nbsp;</TableCell>
                                 </TableRow>
                                 </TableHead>
                                 <TableBody>
                                 {trades && trades.map((row) => (
                                     <TableRow key={row.id}>
-                                    <TableCell>{moment(row.tradeInitDate).format('d MMM, yyyy')}</TableCell>
-                                    <TableCell>{row.scripName}</TableCell>
+                                    <TableCell>{moment(row.createdDate).format('DD MMM, yyyy')}</TableCell>
+                                    <TableCell>{row?.Scrips?.name}</TableCell>
                                     <TableCell>{row.action}</TableCell>
                                     <TableCell>{row.quantity}</TableCell>
-                                    <TableCell>{row.buyPrice}</TableCell>
-                                    <TableCell>{row.buyPrice * 1.03}</TableCell>
-                                    <TableCell>{row.buyPrice * row.quantity}</TableCell>
-                                    <TableCell>{(row.quantity * (row.buyPrice * 1.03 - row.buyPrice)).toFixed(2)}</TableCell>
+                                    <TableCell>{row.price}</TableCell>
+                                    <TableCell>{(row.price * 1.03).toFixed(2)}</TableCell>
+                                    <TableCell>{row.totalAmount}</TableCell>
+                                    <TableCell>{(row.quantity * (row.price * 1.03 - row.price)).toFixed(2)}</TableCell>
                                     <TableCell align="right">
                                         <Button>Edit</Button>
                                         <Button>Delte</Button>

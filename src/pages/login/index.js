@@ -40,6 +40,7 @@ const Login = (props) => {
     async function checkUser () {
         try {
         const user = await Auth.currentAuthenticatedUser();
+        console.log("user:", user)
         props.history.push("/dashboard")
         }
         catch (e) {

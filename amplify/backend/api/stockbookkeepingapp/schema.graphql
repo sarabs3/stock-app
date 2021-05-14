@@ -1,6 +1,20 @@
+type UserTrades @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  createdDate: AWSDateTime
+  Scrips: Scrips @connection
+  quantity: Int
+  price: Float
+  totalAmount: Float
+  target: Float
+  expectedProfit: Float
+  tradeDate: AWSDateTime
+  userId: ID
+}
+
 type Scrips @model @auth(rules: [{allow: public}]) {
   id: ID!
   symbol: String
   name: String
   sector: String
 }
+ 

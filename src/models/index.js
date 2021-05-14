@@ -4,8 +4,9 @@ import { schema } from './schema';
 
 
 
-const { Scrips } = initSchema(schema);
+const { UserTrades, Scrips } = initSchema(schema);
 
 export {
+  UserTrades,
   Scrips
 };
