@@ -1,13 +1,13 @@
 type UserTrades @model @auth(rules: [{allow: public}]) {
   id: ID!
-  createdDate: AWSDateTime
+  createdDate: AWSDate
   Scrips: Scrips @connection
   quantity: Int
   price: Float
   totalAmount: Float
   target: Float
   expectedProfit: Float
-  tradeDate: AWSDateTime
+  tradeDate: AWSDate
   userId: ID
 }
 

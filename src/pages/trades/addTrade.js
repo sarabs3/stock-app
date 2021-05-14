@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { Button, Container, Table, TableBody, TableCell, TableHead, TableRow, TextField } from "@material-ui/core";
+import { Button, Container, MenuItem, Select, Table, TableBody, TableCell, TableHead, TableRow, TextField } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
+import { Auth } from 'aws-amplify'
 import Grid from '@material-ui/core/Grid';
 import { DataStore } from '@aws-amplify/datastore';
-import { UserTrades } from '../../models';
+import { UserTrades, Scrips } from '../../models';
 import AppLayout from "../../components/layout/AppLayout";
 
 const useStyles = makeStyles((theme) => ({
@@ -14,18 +15,36 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   }));
-  const initialFormState = { symbol: "", name: "" };
+  const initialFormState = {
+  quantity: 0,
+price: 0 };
 
 const AddTrade = () => {
     const classes = useStyles();
     const [formValues, setFormValues] = useState(initialFormState);
+    const [selectedScrip, setSelectedScrip] = useState({});
     const [scripsNew, updateScrips] = useState([]);
     const [loading, setLoading] = useState(false);
     const submit = async () => {
         setLoading(true);
-        // await DataStore.save(
-        //     new Scrips(formValues)
-        // );
+        const user = await Auth.currentAuthenticatedUser();
+        const price = parseFloat(formValues.price);
+        const quantity = parseInt(formValues.quantity);
+        const target = parseFloat((price+(price/33)).toFixed(2));
+        const payload = {
+            date: new Date(),
+            userId: user.attributes?.sub,
+            price,
+            quantity,
+            Scrips: selectedScrip,
+            totalAmount: parseFloat((price * quantity).toFixed(2)),
+            target,
+            expectedProfit: parseFloat((quantity * (target - price)).toFixed(2)),
+        };
+        console.log('user:', user.attributes?.sub, payload);
+        await DataStore.save(
+            new UserTrades(payload)
+        );
         setLoading(false);
         setFormValues({ ...initialFormState });
     }
@@ -37,7 +56,7 @@ const AddTrade = () => {
     }
     
     const fetchScripts = async () => {
-        const models = await DataStore.query(UserTrades);
+        const models = await DataStore.query(Scrips);
         return models;
     }
     useEffect(() => {
@@ -46,6 +65,9 @@ const AddTrade = () => {
             updateScrips([...data])
         });
     }, []);
+    const handleChange = (e) => {
+        setSelectedScrip(e.target.value)
+    }
     return (
         <AppLayout pageName="Add Trade">
             <Container maxWidth="lg">
@@ -53,23 +75,36 @@ const AddTrade = () => {
                 {loading ? <div>Loading</div> : (
                 <Grid container>
                     <Grid item xs={12}>
-                        <TextField
-                            id="name"
-                            label="Company Name"
-                            name="name"
-                            value={formValues.name}
-                            onChange={(e) => updateField(e.target.name, e.target.value)}
-                        />
-                    </Grid>
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="scrip"
+                        onChange={handleChange}
+                        >
+                            {scripsNew.map(scrip => (
+                                <MenuItem key={scrip.id} value={scrip}>{scrip.name}</MenuItem>
+                            ))}
+                    </Select>
+                    </Grid>                    
                     <Grid item xs={12}>
                         <TextField
-                            id="symbol"
-                            label="Symbol"
-                            name="symbol"
-                            value={formValues.symbol}
+                            id="quantity"
+                            label="Quantity"
+                            name="quantity"
+                            value={formValues.quantity}
                             onChange={(e) => updateField(e.target.name, e.target.value)}
                         />
                     </Grid>
+                    
+                    <Grid item xs={12}>
+                        <TextField
+                            id="price"
+                            label="Price"
+                            name="price"
+                            value={formValues.price}
+                            onChange={(e) => updateField(e.target.name, e.target.value)}
+                        />
+                    </Grid>
+                    
                     <Grid item xs={12}>
                         <Button onClick={submit} variant="contained">Submit</Button>
                     </Grid>
