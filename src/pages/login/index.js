@@ -61,6 +61,7 @@ const Login = (props) => {
 
     return (
         <div>
+            <h2>Login Here</h2>
             <div style={{ display: 'flex', justifyContent: 'center', width: '98%', marginTop: 100 }} >
                 {formType === 'signup' && <SignUpForm onChange={onChange} submitForm={signUp} goToSignIn={goToSignIn} />}
                 {formType === 'confirmSignup' && <ConfirmSugnupForm onChange={onChange} submitForm={confirmSignUp} />}
