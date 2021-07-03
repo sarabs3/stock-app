@@ -52,13 +52,14 @@ const AddTrade = () => {
     const [scripsNew, updateScrips] = useState([]);
     const [loading, setLoading] = useState(false);
     const submit = async () => {
+        console.log('aaaa=>', formValues);
         setLoading(true);
         const user = await Auth.currentAuthenticatedUser();
         const price = parseFloat(formValues.price);
         const quantity = parseInt(formValues.quantity);
         const target = parseFloat((price+(price/33)).toFixed(2));
         const payload = {
-            createdDate: moment().format('yyyy-MM-DD'),
+            createdDate: formValues.createdDate,
             userId: user.attributes?.sub,
             price,
             quantity,
@@ -121,7 +122,20 @@ const AddTrade = () => {
                                             <MenuItem key={scrip.id} value={scrip}>{scrip.name}</MenuItem>
                                         ))}
                                 </Select>
-                            </Grid>                    
+                            </Grid>  
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="Created Date"
+                                    type="date"
+                                    name="createdDate"
+                                    defaultValue={moment().format("yyyy-MM-DD")}
+                                    className={classes.textField}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    onChange={(e) => updateField(e.target.name, e.target.value)}
+                                />
+                            </Grid>                  
                             <Grid item xs={12}>
                                 <TextField
                                     id="quantity"
