@@ -37,19 +37,20 @@ const Login = (props) => {
         await Auth.signOut();
         setFormState({ ...formState, formType: "signup" });
     }
-    async function checkUser () {
-        try {
-        const user = await Auth.currentAuthenticatedUser();
-        console.log("user:", user)
-        props.history.push("/dashboard")
-        }
-        catch (e) {
-            console.log('error in getting user info: ', e)
-        }
-    }
+    
     useEffect(() => {
+        async function checkUser () {
+            try {
+            const user = await Auth.currentAuthenticatedUser();
+            console.log("user:", user)
+            props.history.push("/dashboard")
+            }
+            catch (e) {
+                console.log('error in getting user info: ', e)
+            }
+        }
         checkUser();
-    }, [])
+    }, [props.history])
 
 
     function goToSignIn () {

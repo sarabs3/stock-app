@@ -1,18 +1,44 @@
 import { useState, useEffect } from "react";
-import { Button, Container, MenuItem, Select, Table, TableBody, TableCell, TableHead, TableRow, TextField } from "@material-ui/core";
+import { Button, Container, MenuItem, Select, TextField } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 import { Auth } from 'aws-amplify'
 import Grid from '@material-ui/core/Grid';
 import { DataStore } from '@aws-amplify/datastore';
 import { UserTrades, Scrips } from '../../models';
 import AppLayout from "../../components/layout/AppLayout";
+import moment from "moment";
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
+root: {
+        minWidth: 275,
+        width: '100%',
       '& > *': {
         margin: theme.spacing(1),
         width: '25ch',
       },
+      bullet: {
+        display: 'inline-block',
+        margin: '0 2px',
+        transform: 'scale(0.8)',
+      },
+      title: {
+        fontSize: 14,
+      },
+      pos: {
+        marginBottom: 12,
+      },
+    },
+    cardContent: {
+        width: '100%'
+    },
+    input: {
+        width: '100%'
+    },
+    button: {
+        marginTop: '2rem'
     },
   }));
   const initialFormState = {
@@ -32,7 +58,7 @@ const AddTrade = () => {
         const quantity = parseInt(formValues.quantity);
         const target = parseFloat((price+(price/33)).toFixed(2));
         const payload = {
-            date: new Date(),
+            createdDate: moment().format('yyyy-MM-DD'),
             userId: user.attributes?.sub,
             price,
             quantity,
@@ -68,45 +94,63 @@ const AddTrade = () => {
     const handleChange = (e) => {
         setSelectedScrip(e.target.value)
     }
+    console.log('a');
+
+    
     return (
         <AppLayout pageName="Add Trade">
             <Container maxWidth="lg">
             <form className={classes.root} noValidate autoComplete="off">
                 {loading ? <div>Loading</div> : (
-                <Grid container>
+                <Grid container style={{width: '100%'}}>
                     <Grid item xs={12}>
-                    <Select
-                        labelId="demo-simple-select-label"
-                        id="scrip"
-                        onChange={handleChange}
-                        >
-                            {scripsNew.map(scrip => (
-                                <MenuItem key={scrip.id} value={scrip}>{scrip.name}</MenuItem>
-                            ))}
-                    </Select>
-                    </Grid>                    
-                    <Grid item xs={12}>
-                        <TextField
-                            id="quantity"
-                            label="Quantity"
-                            name="quantity"
-                            value={formValues.quantity}
-                            onChange={(e) => updateField(e.target.name, e.target.value)}
-                        />
-                    </Grid>
-                    
-                    <Grid item xs={12}>
-                        <TextField
-                            id="price"
-                            label="Price"
-                            name="price"
-                            value={formValues.price}
-                            onChange={(e) => updateField(e.target.name, e.target.value)}
-                        />
-                    </Grid>
-                    
-                    <Grid item xs={12}>
-                        <Button onClick={submit} variant="contained">Submit</Button>
+                    <Card className={classes.root}>
+                        <CardContent className={classes.cardContent}>
+                            <Grid container style={{width: '100%'}}>
+                            <Grid item xs={12}>
+                                <Typography variant="h5" component="h2">
+                                Add Trade
+                                </Typography>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="scrip"
+                                    style={{width: '100%'}}
+                                    onChange={handleChange}
+                                    >
+                                        {scripsNew.map(scrip => (
+                                            <MenuItem key={scrip.id} value={scrip}>{scrip.name}</MenuItem>
+                                        ))}
+                                </Select>
+                            </Grid>                    
+                            <Grid item xs={12}>
+                                <TextField
+                                    id="quantity"
+                                    style={{width: '100%'}}
+                                    label="Quantity"
+                                    name="quantity"
+                                    value={formValues.quantity}
+                                    onChange={(e) => updateField(e.target.name, e.target.value)}
+                                />
+                            </Grid>
+                            
+                            <Grid item xs={12}>
+                                <TextField
+                                    id="price"
+                                    label="Price"
+                                    className={classes.input}
+                                    name="price"
+                                    value={formValues.price}
+                                    onChange={(e) => updateField(e.target.name, e.target.value)}
+                                />
+                            </Grid>
+                            
+                            <Grid item xs={12}>
+
+                            <Button className={classes.button} onClick={submit} variant="contained">Submit</Button>
+                        </Grid>
+                        </Grid>
+                        </CardContent>
+                    </Card>
                     </Grid>
                 </Grid>
                 )}

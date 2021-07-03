@@ -47,7 +47,7 @@ export default function Orders(props) {
         </TableBody>
       </Table>
       <div className={classes.seeMore}>
-        <Link color="primary" href="/trade">
+        <Link color="primary" to="/trade">
           See more trades
         </Link>
       </div>

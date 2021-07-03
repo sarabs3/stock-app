@@ -12,14 +12,14 @@
       "AmplifyAppId": "d1ud1y4qx8ooqm"
     },
     "categories": {
+      "auth": {
+        "stockbookkeepingappdd0aedf1": {}
+      },
       "hosting": {
         "amplifyhosting": {
           "appId": "d1ud1y4qx8ooqm",
           "type": "cicd"
         }
-      },
-      "auth": {
-        "stockbookkeepingappdd0aedf1": {}
       }
     }
   }

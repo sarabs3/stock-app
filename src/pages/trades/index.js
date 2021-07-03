@@ -32,14 +32,19 @@ const TradesComponent = (props) => {
     
     const fetchTrades = async () => {
         const models = await DataStore.query(UserTrades);
+        console.log('adadds', models)
         return models;
     }
     useEffect(() => {
         fetchTrades().then(data => {
-            console.log("data data", data)
+            console.log("data data 1 2 3 4 5", data)
             updateTrades([...data])
+        })
+        .catch((e) => {
+            console.warn('unable to fetch data', e)
         });
     }, []);
+
 const classes = {}
 const body = (
     <div >
