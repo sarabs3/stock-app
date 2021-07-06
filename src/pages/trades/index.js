@@ -7,6 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Container from '@material-ui/core/Container';
+import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Title from '../../components/Title';
@@ -14,8 +15,16 @@ import moment from 'moment';
 import { DataStore } from '@aws-amplify/datastore';
 import { UserTrades } from '../../models';
 import { Modal } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+
+const useStyles = makeStyles({
+    container: {
+        width: '100%'
+    }
+});
 const TradesComponent = (props) => {
-    const [open, handleOpen] = useState(false);
+    const [open, setOpen] = useState(false);
+    const history = useHistory();
     const [trades, updateTrades] = useState([
         {
             id:1,
@@ -45,27 +54,32 @@ const TradesComponent = (props) => {
         });
     }, []);
 
-const classes = {}
-const body = (
-    <div >
-      <h2 id="simple-modal-title">Text in a modal</h2>
-      <p id="simple-modal-description">
-        Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-      </p>
-    </div>
-  );
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
+const classes = useStyles();
+const renderTradeModal = () => (
+    <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+    >
+        <div>   
+            <h2 id="simple-modal-title">Text in a modal</h2>
+            <p id="simple-modal-description">
+                Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            </p>
+        </div>
+    </Modal>
+);
     return (
         <AppLayout pageName="Trades">
-            <Container maxWidth="lg" className={classes.container}>
-            <Modal
-            open={open}
-            onClose={() => handleOpen(false)}
-            aria-labelledby="simple-modal-title"
-            aria-describedby="simple-modal-description"
-            >{body}
-            </Modal>
+            <Container className={classes.container}>
+                {renderTradeModal()}
                 <Grid container spacing={3}>
-                    <Grid item xs={12} md={8} lg={9}>
+                    <Grid item xs={12} md={8} lg={12}>
                         <Paper>
                             <Title>Recent Trades</Title>
                             <Button onClick={() => props.history.push("/trade/add")} variant="contained" color="primary">Add Trade</Button>
@@ -80,12 +94,13 @@ const body = (
                                     <TableCell>Targets</TableCell>
                                     <TableCell>Total Amount</TableCell>
                                     <TableCell>Expected Profit</TableCell>
+                                    <TableCell>Trade Date</TableCell>
                                     <TableCell align="right">&nbsp;</TableCell>
                                 </TableRow>
                                 </TableHead>
                                 <TableBody>
                                 {trades && trades.map((row) => (
-                                    <TableRow key={row.id}>
+                                    <TableRow key={row.id} style={{ backgroundColor: row.tradeDate ? 'green' : ''}}>
                                     <TableCell>{moment(row.createdDate).format('DD MMM, yyyy')}</TableCell>
                                     <TableCell>{row?.Scrips?.name}</TableCell>
                                     <TableCell>{row.action}</TableCell>
@@ -94,9 +109,10 @@ const body = (
                                     <TableCell>{(row.price * 1.03).toFixed(2)}</TableCell>
                                     <TableCell>{row.totalAmount}</TableCell>
                                     <TableCell>{(row.quantity * (row.price * 1.03 - row.price)).toFixed(2)}</TableCell>
+                                    <TableCell>{row.tradeDate}</TableCell>
                                     <TableCell align="right">
-                                        <Button>Edit</Button>
-                                        <Button>Delte</Button>
+                                        <Button variant="outlined" onClick={() => history.push({ pathname: `/trade/edit/${row.id}`, state: { item: row, quantity: row.quantity, price: (row.price * 1.03).toFixed(2) }})} >Complete Trade</Button>
+                                        <Button variant="icon">Delte</Button>
                                         </TableCell>
                                     </TableRow>
                                 ))}

@@ -4,12 +4,14 @@ import Trades from "./pages/trades";
 import AddScrip from "./pages/scrips/AddScrip";
 import Login from "./pages/login";
 import AddTrade from "./pages/trades/addTrade";
+import EditTrade from "./pages/trades/EditTrade";
 
 function AllRoutes() {
   return (
     <Switch>
       <Route path="/trade" component={Trades} exact />
       <Route path="/trade/add" component={AddTrade} />
+      <Route path="/trade/edit/:id" component={EditTrade} />
       <Route path="/scrips/add" component={AddScrip} />
       <Route path="/login" component={Login} />
       <Route path="/dashboard" component={Dashboard} />
