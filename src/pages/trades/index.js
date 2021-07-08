@@ -106,10 +106,10 @@ const renderTradeModal = () => (
                                     <TableCell>{row.action}</TableCell>
                                     <TableCell>{row.quantity}</TableCell>
                                     <TableCell>{row.price}</TableCell>
-                                    <TableCell>{(row.price * 1.03).toFixed(2)}</TableCell>
+                                    <TableCell>{row.target}</TableCell>
                                     <TableCell>{row.totalAmount}</TableCell>
-                                    <TableCell>{(row.quantity * (row.price * 1.03 - row.price)).toFixed(2)}</TableCell>
-                                    <TableCell>{row.tradeDate}</TableCell>
+                                    <TableCell>{row.expectedProfit}</TableCell>
+                                    <TableCell>{moment(row.tradeDate).format('DD MMM, yyyy')}</TableCell>
                                     <TableCell align="right">
                                         <Button variant="outlined" onClick={() => history.push({ pathname: `/trade/edit/${row.id}`, state: { item: row, quantity: row.quantity, price: (row.price * 1.03).toFixed(2) }})} >Complete Trade</Button>
                                         <Button variant="icon">Delte</Button>

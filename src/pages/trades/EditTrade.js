@@ -53,10 +53,13 @@ const EditTrade = (props) => {
 
         // If the quantity is same then update the current trade to be completed
         const quantity = parseInt(formValues.quantity);
+        const price = parseFloat(formValues.price);
         if (quantity === props.location?.state?.quantity) {
             setLoading(true);
             await DataStore.save(UserTrades.copyOf(props.location?.state?.item, item => {
                 item.tradeDate = formValues.tradeDate;
+                item.totalAmount = parseFloat((price * quantity).toFixed(2));
+                item.expectedProfit = parseFloat((quantity * (price - props.location?.state?.item?.price)).toFixed(2));
                 return item;
             }));
             setLoading(false);
@@ -72,6 +75,9 @@ const EditTrade = (props) => {
         const payload = {
             ...props.location?.state?.item,
             quantity: remainingQuantity,
+            totalAmount: parseFloat((price * quantity).toFixed(2)),
+            expectedProfit: parseFloat((quantity * (props.location?.state?.item?.expectedProfit - props.location?.state?.item?.price)).toFixed(2)),
+
         };
         await DataStore.save(
             new UserTrades(payload)
@@ -79,7 +85,10 @@ const EditTrade = (props) => {
         
         await DataStore.save(UserTrades.copyOf(props.location?.state?.item, item => {
             item.quantity = quantity;
+            item.target = price;
+            item.totalAmount = parseFloat((price * quantity).toFixed(2));
             item.tradeDate = formValues.tradeDate;
+            item.expectedProfit = parseFloat((quantity * (price - props.location?.state?.item?.price)).toFixed(2));
             return item;
         }));
         setLoading(false);
