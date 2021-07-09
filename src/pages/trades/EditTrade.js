@@ -75,8 +75,8 @@ const EditTrade = (props) => {
         const payload = {
             ...props.location?.state?.item,
             quantity: remainingQuantity,
-            totalAmount: parseFloat((price * quantity).toFixed(2)),
-            expectedProfit: parseFloat((quantity * (props.location?.state?.item?.expectedProfit - props.location?.state?.item?.price)).toFixed(2)),
+            totalAmount: parseFloat((price * remainingQuantity).toFixed(2)),
+            expectedProfit: parseFloat((remainingQuantity * (props.location?.state?.item?.expectedProfit - props.location?.state?.item?.price)).toFixed(2)),
 
         };
         await DataStore.save(
