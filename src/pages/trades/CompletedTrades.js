@@ -15,16 +15,14 @@ import moment from 'moment';
 import { DataStore } from '@aws-amplify/datastore';
 import { UserTrades } from '../../models';
 import { Modal } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles({
     container: {
         width: '100%'
     }
 });
-const TradesComponent = (props) => {
+const CompletedTrades = (props) => {
     const [open, setOpen] = useState(false);
-    const history = useHistory();
     const [trades, updateTrades] = useState([
         {
             id:1,
@@ -47,7 +45,7 @@ const TradesComponent = (props) => {
     useEffect(() => {
         fetchTrades().then(data => {
             console.log("data data 1 2 3 4 5", data)
-            updateTrades([...data.filter(f => !f.tradeDate)])
+            updateTrades([...data.filter(f => f.tradeDate)])
         })
         .catch((e) => {
             console.warn('unable to fetch data', e)
@@ -88,7 +86,7 @@ const renderTradeModal = () => (
                         <Paper>
                             <Title>Recent Trades</Title>
                             <Button onClick={() => props.history.push("/trade/add")} variant="contained" color="primary">Add Trade</Button>
-                            <Button onClick={() => props.history.push("/trade/completed")} variant="contained">View Completed Trade</Button>
+                            <Button onClick={() => props.history.push("/trade")} variant="contained">View Trades</Button>
                             <Table size="small">
                                 <TableHead>
                                 <TableRow>
@@ -101,7 +99,6 @@ const renderTradeModal = () => (
                                     <TableCell>Total Amount</TableCell>
                                     <TableCell>Expected Profit</TableCell>
                                     <TableCell>Trade Date</TableCell>
-                                    <TableCell align="right">&nbsp;</TableCell>
                                 </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -116,10 +113,6 @@ const renderTradeModal = () => (
                                     <TableCell>{row.totalAmount}</TableCell>
                                     <TableCell>{row.expectedProfit}</TableCell>
                                     <TableCell>{moment(row.tradeDate).format('DD MMM, yyyy')}</TableCell>
-                                    <TableCell align="right">
-                                        <Button variant="outlined" onClick={() => history.push({ pathname: `/trade/edit/${row.id}`, state: { item: row, quantity: row.quantity, price: (row.price * 1.03).toFixed(2) }})} >Complete Trade</Button>
-                                        <Button variant="icon" onClick={() => deleteTrade(row.id)} >Delete</Button>
-                                        </TableCell>
                                     </TableRow>
                                 ))}
                                 </TableBody>
@@ -132,4 +125,4 @@ const renderTradeModal = () => (
     )
 }
 
-export default TradesComponent;
+export default CompletedTrades;

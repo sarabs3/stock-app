@@ -6,11 +6,13 @@ import Login from "./pages/login";
 import AddTrade from "./pages/trades/addTrade";
 import EditTrade from "./pages/trades/EditTrade";
 import ScripTrade from "./pages/scrips/ScripTrade";
+import CompletedTrades from "./pages/trades/CompletedTrades";
 
 function AllRoutes() {
   return (
     <Switch>
       <Route path="/trade" component={Trades} exact />
+      <Route path="/trade/completed" component={CompletedTrades} exact />
       <Route path="/trade/add" component={AddTrade} />
       <Route path="/trade/edit/:id" component={EditTrade} />
       <Route path="/scrips/add" component={AddScrip} />
