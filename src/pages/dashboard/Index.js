@@ -17,6 +17,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import { Link } from 'react-router-dom';
 
 function Copyright() {
   return (
@@ -116,6 +117,7 @@ function createStats (values) {
     trades: values[val].length,
     quantity: values[val].reduce((a,c) => a + c.quantity, 0),
     amount: values[val].reduce((a,c) => a + c.totalAmount, 0),
+    id: values[val][0].Scrips.id
   }))
 }
 
@@ -129,7 +131,8 @@ export default function Dashboard() {
   useEffect(
     () => {
       fetchScripts().then(data => {
-        const groupValues = _gropuBy(data, (d) => d.Scrips.symbol);
+        const filterTraded = data.filter(f => !f.tradeDate);
+        const groupValues = _gropuBy(filterTraded, (d) => d.Scrips.symbol);
         setHoldings([...createStats(groupValues)]);
       })
     },
@@ -174,7 +177,8 @@ export default function Dashboard() {
                   <TableBody>
                     {holdings.length > 0 && holdings.map(stat => (
                       <TableRow key={stat.name}>
-                        <TableCell>{stat.name}</TableCell>
+                        
+                        <TableCell><Link to={`/trade/${stat.id}`}>{stat.name}</Link></TableCell>
                         <TableCell>{stat.trades}</TableCell>
                         <TableCell>{stat.quantity}</TableCell>
                         <TableCell>{(stat.amount / stat.quantity).toFixed(2)}</TableCell>

@@ -5,6 +5,7 @@ import AddScrip from "./pages/scrips/AddScrip";
 import Login from "./pages/login";
 import AddTrade from "./pages/trades/addTrade";
 import EditTrade from "./pages/trades/EditTrade";
+import ScripTrade from "./pages/scrips/ScripTrade";
 
 function AllRoutes() {
   return (
@@ -13,6 +14,7 @@ function AllRoutes() {
       <Route path="/trade/add" component={AddTrade} />
       <Route path="/trade/edit/:id" component={EditTrade} />
       <Route path="/scrips/add" component={AddScrip} />
+      <Route path="/trade/:id" component={ScripTrade} />
       <Route path="/login" component={Login} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/" component={Login} />
