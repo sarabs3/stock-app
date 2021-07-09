@@ -53,6 +53,11 @@ const TradesComponent = (props) => {
             console.warn('unable to fetch data', e)
         });
     }, []);
+    const deleteTrade = async (id) => {
+        const modelToDelete = await DataStore.query(UserTrades, id);
+        DataStore.delete(modelToDelete);
+        window.location.reload();
+    };
 
   
     const handleClose = () => {
@@ -113,7 +118,7 @@ const renderTradeModal = () => (
                                     <TableCell>{moment(row.tradeDate).format('DD MMM, yyyy')}</TableCell>
                                     <TableCell align="right">
                                         <Button variant="outlined" onClick={() => history.push({ pathname: `/trade/edit/${row.id}`, state: { item: row, quantity: row.quantity, price: (row.price * 1.03).toFixed(2) }})} >Complete Trade</Button>
-                                        <Button variant="icon">Delte</Button>
+                                        <Button variant="icon" onClick={() => deleteTrade(row.id)} >Delete</Button>
                                         </TableCell>
                                     </TableRow>
                                 ))}

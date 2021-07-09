@@ -10,6 +10,7 @@ import moment from "moment";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
 root: {
@@ -46,6 +47,7 @@ root: {
 price: 0 };
 
 const AddTrade = () => {
+    const history = useHistory();
     const classes = useStyles();
     const [formValues, setFormValues] = useState(initialFormState);
     const [selectedScrip, setSelectedScrip] = useState({});
@@ -74,6 +76,7 @@ const AddTrade = () => {
         );
         setLoading(false);
         setFormValues({ ...initialFormState });
+        history.push('/trade');
     }
     const updateField = (key, value) => {
         setFormValues((prevState) => ({
