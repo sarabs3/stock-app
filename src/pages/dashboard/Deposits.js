@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import Title from '../../components/Title';
 
@@ -10,13 +11,13 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Deposits() {
+export default function Deposits({ total }) {
   const classes = useStyles();
   return (
     <React.Fragment>
-      <Title>Total Profit</Title>
+      <Title>Total Invested</Title>
       <Typography component="p" variant="h4">
-        $3,024.00
+        {total.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
       </Typography>
       <Typography color="textSecondary" className={classes.depositContext}>
         on {moment().format('d MMM, yyyy')}
@@ -24,3 +25,9 @@ export default function Deposits() {
     </React.Fragment>
   );
 }
+Deposits.propTypes = {
+  total: PropTypes.number,
+};
+Deposits.defaultProps = {
+  total: 0
+};

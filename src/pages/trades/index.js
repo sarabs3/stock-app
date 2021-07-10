@@ -100,7 +100,6 @@ const renderTradeModal = () => (
                                     <TableCell>Targets</TableCell>
                                     <TableCell>Total Amount</TableCell>
                                     <TableCell>Expected Profit</TableCell>
-                                    <TableCell>Trade Date</TableCell>
                                     <TableCell align="right">&nbsp;</TableCell>
                                 </TableRow>
                                 </TableHead>
@@ -115,9 +114,8 @@ const renderTradeModal = () => (
                                     <TableCell>{row.target}</TableCell>
                                     <TableCell>{row.totalAmount}</TableCell>
                                     <TableCell>{row.expectedProfit}</TableCell>
-                                    <TableCell>{moment(row.tradeDate).format('DD MMM, yyyy')}</TableCell>
                                     <TableCell align="right">
-                                        <Button variant="outlined" onClick={() => history.push({ pathname: `/trade/edit/${row.id}`, state: { item: row, quantity: row.quantity, price: (row.price * 1.03).toFixed(2) }})} >Complete Trade</Button>
+                                        <Button variant="outlined" onClick={() => history.push({ pathname: `/trade/edit/${row.id}`, state: { item: row, quantity: row.quantity, price: (row.price * 1.03).toFixed(2) }})} >Complete</Button>
                                         <Button variant="icon" onClick={() => deleteTrade(row.id)} >Delete</Button>
                                         </TableCell>
                                     </TableRow>

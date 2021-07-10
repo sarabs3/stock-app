@@ -112,17 +112,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function createStats (values) {
-  return Object.keys(values).map(val => ({
+  const groupedTrades = Object.keys(values).map(val => ({
     name: val,
     trades: values[val].length,
     quantity: values[val].reduce((a,c) => a + c.quantity, 0),
     amount: values[val].reduce((a,c) => a + c.totalAmount, 0),
     id: values[val][0].Scrips.id
-  }))
+  })).sort((a,b) => a.amount > b.amount ? -1 : 1);
+  const total = groupedTrades.reduce((a,c) => a + c.amount, 0);
+  return {groupedTrades, total};
 }
 
 export default function Dashboard() {
   const [holdings, setHoldings] = useState([]);
+  const [totalInvested, setTotalInvested] = useState(0);
     
   const fetchScripts = async () => {
       const models = await DataStore.query(UserTrades);
@@ -133,7 +136,9 @@ export default function Dashboard() {
       fetchScripts().then(data => {
         const filterTraded = data.filter(f => !f.tradeDate);
         const groupValues = _gropuBy(filterTraded, (d) => d.Scrips.symbol);
-        setHoldings([...createStats(groupValues)]);
+        const {groupedTrades, total} = createStats(groupValues);
+        setHoldings([...groupedTrades]);
+        setTotalInvested(total);
       })
     },
     []
@@ -153,7 +158,7 @@ export default function Dashboard() {
             {/* Recent Deposits */}
             <Grid item xs={12} md={4} lg={3}>
               <Paper className={fixedHeightPaper}>
-                <Deposits />
+                <Deposits total={totalInvested} />
               </Paper>
             </Grid>
             {/* Recent Orders */}
