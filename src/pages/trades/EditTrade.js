@@ -58,8 +58,9 @@ const EditTrade = (props) => {
             setLoading(true);
             await DataStore.save(UserTrades.copyOf(props.location?.state?.item, item => {
                 item.tradeDate = formValues.tradeDate;
+                item.target = price;
                 item.totalAmount = parseFloat((price * quantity).toFixed(2));
-                item.expectedProfit = parseFloat((quantity * (price - props.location?.state?.item?.price)).toFixed(2));
+                item.expectedProfit = parseFloat((quantity * (price - parseFloat(props.location?.state?.item?.price))).toFixed(2));
                 return item;
             }));
             setLoading(false);
@@ -71,12 +72,17 @@ const EditTrade = (props) => {
         const remainingQuantity = props.location?.state?.quantity - quantity;
         setLoading(true);
 
-
+        const expectedProfit = parseFloat((remainingQuantity * (parseFloat(props.location?.state?.item?.target) - parseFloat(props.location?.state?.item?.price))).toFixed(2));
+        const expectedProfit2 = parseFloat((quantity * (price - parseFloat(props.location?.state?.item?.price))).toFixed(2));;
+        if (!expectedProfit || !expectedProfit2) {
+            alert('error');
+            return;
+        }
         const payload = {
             ...props.location?.state?.item,
             quantity: remainingQuantity,
             totalAmount: parseFloat((price * remainingQuantity).toFixed(2)),
-            expectedProfit: parseFloat((remainingQuantity * (props.location?.state?.item?.expectedProfit - props.location?.state?.item?.price)).toFixed(2)),
+            expectedProfit: expectedProfit,
 
         };
         await DataStore.save(
@@ -88,7 +94,7 @@ const EditTrade = (props) => {
             item.target = price;
             item.totalAmount = parseFloat((price * quantity).toFixed(2));
             item.tradeDate = formValues.tradeDate;
-            item.expectedProfit = parseFloat((quantity * (price - props.location?.state?.item?.price)).toFixed(2));
+            item.expectedProfit = expectedProfit2;
             return item;
         }));
         setLoading(false);
