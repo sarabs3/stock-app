@@ -14,7 +14,7 @@ import Title from '../../components/Title';
 import moment from 'moment';
 import { DataStore } from '@aws-amplify/datastore';
 import { UserTrades } from '../../models';
-import { Modal } from '@material-ui/core';
+import { Modal, TextField } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles({
@@ -24,7 +24,9 @@ const useStyles = makeStyles({
 });
 const TradesComponent = (props) => {
     const [open, setOpen] = useState(false);
+    const [todayTrades, updateTodayTrades] = useState([]);
     const history = useHistory();
+    const [showDayTrade, updateDayTrade] = useState(false);
     const [trades, updateTrades] = useState([
         {
             id:1,
@@ -40,7 +42,7 @@ const TradesComponent = (props) => {
     ]);
     
     const fetchTrades = async () => {
-        const models = await DataStore.query(UserTrades);
+        const models = await DataStore.query(UserTrades).catch();
         console.log('adadds', models)
         return models;
     }
@@ -63,6 +65,10 @@ const TradesComponent = (props) => {
     const handleClose = () => {
       setOpen(false);
     };
+    const updateField = (value) => {
+        updateDayTrade(true);
+        updateTodayTrades(trades.filter(f => f.createdDate === value));
+    }
 const classes = useStyles();
 const renderTradeModal = () => (
     <Modal
@@ -89,6 +95,17 @@ const renderTradeModal = () => (
                             <Title>Recent Trades</Title>
                             <Button onClick={() => props.history.push("/trade/add")} variant="contained" color="primary">Add Trade</Button>
                             <Button onClick={() => props.history.push("/trade/completed")} variant="contained">View Completed Trade</Button>
+                            <TextField
+                                    label="Created Date"
+                                    type="date"
+                                    name="createdDate"
+                                    defaultValue={moment().format("yyyy-MM-DD")}
+                                    className={classes.textField}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    onChange={(e) => updateField(e.target.value)}
+                                />
                             <Table size="small">
                                 <TableHead>
                                 <TableRow>
@@ -104,7 +121,27 @@ const renderTradeModal = () => (
                                 </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                {trades && trades.map((row) => (
+                                    {showDayTrade ? (
+                                        <>
+                                            {todayTrades.map((row) => (
+                                                <TableRow key={row.id} style={{ backgroundColor: row.tradeDate ? 'green' : ''}}>
+                                                <TableCell>{moment(row.createdDate).format('DD MMM, yyyy')}</TableCell>
+                                                <TableCell>{row?.Scrips?.name}</TableCell>
+                                                <TableCell>{row.action}</TableCell>
+                                                <TableCell>{row.quantity}</TableCell>
+                                                <TableCell>{row.price}</TableCell>
+                                                <TableCell>{row.target}</TableCell>
+                                                <TableCell>{row.totalAmount}</TableCell>
+                                                <TableCell>{row.expectedProfit}</TableCell>
+                                                <TableCell align="right">
+                                                    <Button variant="outlined" onClick={() => history.push({ pathname: `/trade/edit/${row.id}`, state: { item: row, quantity: row.quantity, price: (row.price * 1.03).toFixed(2) }})} >Complete</Button>
+                                                    <Button variant="icon" onClick={() => deleteTrade(row.id)} >Delete</Button>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </>) : (
+                                        <>
+                                        {trades.map((row) => (
                                     <TableRow key={row.id} style={{ backgroundColor: row.tradeDate ? 'green' : ''}}>
                                     <TableCell>{moment(row.createdDate).format('DD MMM, yyyy')}</TableCell>
                                     <TableCell>{row?.Scrips?.name}</TableCell>
@@ -120,6 +157,8 @@ const renderTradeModal = () => (
                                         </TableCell>
                                     </TableRow>
                                 ))}
+                                </>
+                                    )}
                                 </TableBody>
                             </Table>
                         </Paper>

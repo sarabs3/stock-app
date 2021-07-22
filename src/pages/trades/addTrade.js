@@ -44,6 +44,7 @@ root: {
   }));
   const initialFormState = {
   quantity: 0,
+  createdDate: moment().format("yyyy-MM-DD"),
 price: 0 };
 
 const AddTrade = () => {
