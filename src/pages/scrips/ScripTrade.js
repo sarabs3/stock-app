@@ -12,10 +12,9 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Title from '../../components/Title';
 import moment from 'moment';
-import { DataStore } from '@aws-amplify/datastore';
-import { UserTrades } from '../../models';
 import { Modal } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import useTrade from '../../hooks/trades';
 
 const useStyles = makeStyles({
     container: {
@@ -38,23 +37,12 @@ const ScripTrade = (props) => {
             profit: "",
         }
     ]);
-    
-    const fetchTrades = async () => {
-        const models = await DataStore.query(UserTrades);
-        console.log('adadds', models)
-        return models;
-    }
+    const userTrades = useTrade();
     useEffect(() => {
-        console.log('props', props)
-        fetchTrades().then(data => {
-            console.log("data data 1 2 3 4 5", data)
-            //updateTrades([...data])
-            updateTrades([...data.filter(f => f.Scrips.id === props.match.params.id).filter(f => !f.tradeDate)])
-        })
-        .catch((e) => {
-            console.warn('unable to fetch data', e)
-        });
-    }, []);
+        if (userTrades.length === 0) return;
+        updateTrades([...userTrades.filter(f => f.Scrips.id === props.match.params.id).filter(f => !f.tradeDate)])
+    
+    }, [userTrades, props.match.params.id]);
 
   
     const handleClose = () => {

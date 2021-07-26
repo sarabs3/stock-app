@@ -16,6 +16,7 @@ import { DataStore } from '@aws-amplify/datastore';
 import { UserTrades } from '../../models';
 import { Modal, TextField } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import useTrade from '../../hooks/trades';
 
 const useStyles = makeStyles({
     container: {
@@ -40,21 +41,12 @@ const TradesComponent = (props) => {
             profit: "",
         }
     ]);
+    const userTrades = useTrade();
     
-    const fetchTrades = async () => {
-        const models = await DataStore.query(UserTrades).catch();
-        console.log('adadds', models)
-        return models;
-    }
     useEffect(() => {
-        fetchTrades().then(data => {
-            console.log("data data 1 2 3 4 5", data)
-            updateTrades([...data.filter(f => !f.tradeDate)])
-        })
-        .catch((e) => {
-            console.warn('unable to fetch data', e)
-        });
-    }, []);
+        if (userTrades.length === 0) return;
+        updateTrades([...userTrades.filter(f => !f.tradeDate)])
+    }, [userTrades]);
     const deleteTrade = async (id) => {
         const modelToDelete = await DataStore.query(UserTrades, id);
         DataStore.delete(modelToDelete);

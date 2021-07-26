@@ -4,8 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { DataStore } from '@aws-amplify/datastore';
-import { UserTrades } from '../../models';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Chart from './Chart';
@@ -18,6 +16,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { Link } from 'react-router-dom';
+import useTrade from '../../hooks/trades';
 
 function Copyright() {
   return (
@@ -126,23 +125,17 @@ function createStats (values) {
 export default function Dashboard() {
   const [holdings, setHoldings] = useState([]);
   const [totalInvested, setTotalInvested] = useState(0);
+
+  const trades = useTrade();
     
-  const fetchScripts = async () => {
-      const models = await DataStore.query(UserTrades);
-      return models;
-  }
-  useEffect(
-    () => {
-      fetchScripts().then(data => {
-        const filterTraded = data.filter(f => !f.tradeDate);
-        const groupValues = _gropuBy(filterTraded, (d) => d.Scrips.symbol);
-        const {groupedTrades, total} = createStats(groupValues);
-        setHoldings([...groupedTrades]);
-        setTotalInvested(total);
-      })
-    },
-    []
-  );
+  useEffect(() => {
+    if (trades.length  === 0) return;
+    const filterTraded = trades.filter(f => !f.tradeDate);
+    const groupValues = _gropuBy(filterTraded, (d) => d.Scrips.symbol);
+    const {groupedTrades, total} = createStats(groupValues);
+    setHoldings([...groupedTrades]);
+    setTotalInvested(total);
+  }, [trades]);
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   return (

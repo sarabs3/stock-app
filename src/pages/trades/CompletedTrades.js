@@ -17,6 +17,7 @@ import { TextField } from '@material-ui/core';
 import { UserTrades } from '../../models';
 import { Modal } from '@material-ui/core';
 import TradeTable from './TradesTable';
+import useTrade from '../../hooks/trades';
 
 const useStyles = makeStyles({
     container: {
@@ -40,25 +41,17 @@ const CompletedTrades = (props) => {
             profit: "",
         }
     ]);
+    const userTrades = useTrade();
     
-const updateField = (value) => {
-    updateDayTrade(true);
-    updateTodayTrades(trades.filter(f => f.tradeDate === value));
-}
-    const fetchTrades = async () => {
-        const models = await DataStore.query(UserTrades);
-        console.log('adadds', models)
-        return models;
+    const updateField = (value) => {
+        updateDayTrade(true);
+        updateTodayTrades(trades.filter(f => f.tradeDate === value));
     }
     useEffect(() => {
-        fetchTrades().then(data => {
-            console.log("data data 1 2 3 4 5", data)
-            updateTrades([...data.filter(f => f.tradeDate)])
-        })
-        .catch((e) => {
-            console.warn('unable to fetch data', e)
-        });
-    }, []);
+        if (userTrades.length === 0) return;
+        updateTrades([...userTrades.filter(f => f.tradeDate)])
+    }, [userTrades]);
+
     const deleteTrade = async (id) => {
         const modelToDelete = await DataStore.query(UserTrades, id);
         DataStore.delete(modelToDelete);
