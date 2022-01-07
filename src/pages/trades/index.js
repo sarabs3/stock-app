@@ -62,6 +62,10 @@ const TradesComponent = (props) => {
         updateTodayTrades(trades.filter(f => f.createdDate === value));
     }
 const classes = useStyles();
+const showTodayTrades = () => {
+    updateDayTrade(true);
+    updateTodayTrades(trades.filter(f => moment(f.createdDate).format('DD MMM, yyyy') === moment().format('DD MMM, yyyy')));
+};
 const renderTradeModal = () => (
     <Modal
         open={open}
@@ -87,6 +91,7 @@ const renderTradeModal = () => (
                             <Title>Recent Trades</Title>
                             <Button onClick={() => props.history.push("/trade/add")} variant="contained" color="primary">Add Trade</Button>
                             <Button onClick={() => props.history.push("/trade/completed")} variant="contained">View Completed Trade</Button>
+                            <Button onClick={showTodayTrades}>Today Orders</Button>
                             <TextField
                                     label="Created Date"
                                     type="date"
@@ -155,6 +160,15 @@ const renderTradeModal = () => (
                             </Table>
                         </Paper>
                     </Grid>
+                </Grid>
+                <Grid>
+                    <Paper>
+                        <Title>Stats</Title>
+                        <div>
+                            <h3>Total Buy Amount</h3>
+                            <span>{todayTrades.reduce((a,b) => a+b.totalAmount, 0)}</span>
+                        </div>
+                    </Paper>
                 </Grid>
             </Container>    
         </AppLayout>
