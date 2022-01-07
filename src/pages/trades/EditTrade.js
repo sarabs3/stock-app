@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Button, Container, TextField } from "@material-ui/core";
-import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { DataStore } from '@aws-amplify/datastore';
 import { UserTrades } from '../../models';
@@ -9,43 +8,15 @@ import moment from "moment";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import styling from './EditTrade.css';
 
-const useStyles = makeStyles((theme) => ({
-root: {
-        minWidth: 275,
-        width: '100%',
-      '& > *': {
-        margin: theme.spacing(1),
-        width: '25ch',
-      },
-      bullet: {
-        display: 'inline-block',
-        margin: '0 2px',
-        transform: 'scale(0.8)',
-      },
-      title: {
-        fontSize: 14,
-      },
-      pos: {
-        marginBottom: 12,
-      },
-    },
-    cardContent: {
-        width: '100%'
-    },
-    input: {
-        width: '100%'
-    },
-    button: {
-        marginTop: '2rem'
-    },
-  }));
-  const initialFormState = {
+const initialFormState = {
   quantity: 0,
+  tradeDate: moment().format("yyyy-MM-DD"),   
 price: 0 };
 
 const EditTrade = (props) => {
-    const classes = useStyles();
+    const classes = styling();
     const [formValues, setFormValues] = useState(initialFormState);
     const [loading, setLoading] = useState(false);
 
@@ -165,7 +136,25 @@ const EditTrade = (props) => {
                             </Grid>
                             
                             <Grid item xs={12}>
-
+                            <div className={classes.dataToBeEntered}>
+                                    <table>
+                                        <tr>
+                                            <td colSpan={2} className={classes.previewTitle}>Preview</td>
+                                        </tr>
+                                        <tr>
+                                            <td className={classes.title}>Date:</td>
+                                            <td>{formValues.tradeDate}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className={classes.title}>Quantity:</td>
+                                            <td>{formValues.quantity}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className={classes.title}>Price:</td>
+                                            <td>{formValues.price}</td>
+                                        </tr>
+                                    </table>
+                                </div>
                             <Button className={classes.button} onClick={submit} variant="contained">Submit</Button>
                         </Grid>
                         </Grid>

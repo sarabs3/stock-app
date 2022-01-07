@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Button, Container, MenuItem, Select, TextField } from "@material-ui/core";
-import { makeStyles } from '@material-ui/core/styles';
 import { Auth } from 'aws-amplify'
 import Grid from '@material-ui/core/Grid';
 import { DataStore } from '@aws-amplify/datastore';
@@ -11,37 +10,9 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { useHistory } from 'react-router-dom';
+import styles from './addTrade.css';
 
-const useStyles = makeStyles((theme) => ({
-root: {
-        minWidth: 275,
-        width: '100%',
-      '& > *': {
-        margin: theme.spacing(1),
-        width: '25ch',
-      },
-      bullet: {
-        display: 'inline-block',
-        margin: '0 2px',
-        transform: 'scale(0.8)',
-      },
-      title: {
-        fontSize: 14,
-      },
-      pos: {
-        marginBottom: 12,
-      },
-    },
-    cardContent: {
-        width: '100%'
-    },
-    input: {
-        width: '100%'
-    },
-    button: {
-        marginTop: '2rem'
-    },
-  }));
+
   const initialFormState = {
   quantity: 0,
   createdDate: moment().format("yyyy-MM-DD"),
@@ -49,13 +20,12 @@ price: 0 };
 
 const AddTrade = () => {
     const history = useHistory();
-    const classes = useStyles();
+    const classes = styles();
     const [formValues, setFormValues] = useState(initialFormState);
     const [selectedScrip, setSelectedScrip] = useState({});
     const [scripsNew, updateScrips] = useState([]);
     const [loading, setLoading] = useState(false);
     const submit = async () => {
-        console.log('aaaa=>', formValues);
         setLoading(true);
         const user = await Auth.currentAuthenticatedUser();
         const price = parseFloat(formValues.price);
@@ -71,7 +41,6 @@ const AddTrade = () => {
             target,
             expectedProfit: parseFloat((quantity * (target - price)).toFixed(2)),
         };
-        console.log('user:', user.attributes?.sub, payload);
         await DataStore.save(
             new UserTrades(payload)
         );
@@ -92,7 +61,6 @@ const AddTrade = () => {
     }
     useEffect(() => {
         fetchScripts().then(data => {
-            console.log("data data", data)
             updateScrips([...data])
         });
     }, []);
@@ -163,9 +131,31 @@ const AddTrade = () => {
                             </Grid>
                             
                             <Grid item xs={12}>
-
-                            <Button className={classes.button} onClick={submit} variant="contained">Submit</Button>
-                        </Grid>
+                                <div className={classes.dataToBeEntered}>
+                                    <table>
+                                        <tr>
+                                            <td colSpan={2} className={classes.previewTitle}>Preview</td>
+                                        </tr>
+                                        <tr>
+                                            <td className={classes.title}>Stock:</td>
+                                            <td>{selectedScrip?.name}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className={classes.title}>Date:</td>
+                                            <td>{formValues.createdDate}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className={classes.title}>Quantity:</td>
+                                            <td>{formValues.quantity}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className={classes.title}>Price:</td>
+                                            <td>{formValues.price}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <Button className={classes.button} onClick={submit} variant="contained">Submit</Button>
+                            </Grid>
                         </Grid>
                         </CardContent>
                     </Card>
