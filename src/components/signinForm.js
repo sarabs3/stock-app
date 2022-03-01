@@ -7,21 +7,27 @@ import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles({
     fieldContainer: {
-        width: '100%',
-        marginBottom: 10,
+        marginBottom: 14,
+        width: '100%'
     },
     field: {
         width: '100%',
-        border: '1px solid #ccc',
-        borderRadius: 10,
-        padding: 10
+        border: 'none',
+        borderRadius: 6,
+        padding: 8,
+        background: '#0180ff',
+        boxShadow: 'none',
     },
+    formStyle: {
+        maxWidth: 350,
+    }
 });
 
 const SignInForm = ({ onChange, submitForm, signupLink }) => {
+    console.log(submitForm, 'submitForm');
     const styles = useStyles();
     return (
-        <Card>
+        <Card className={styles.formStyle}>
             <CardContent>
                 <Container>
                     <Grid container alignContent="center" alignItems="center" justify="center">
@@ -35,7 +41,7 @@ const SignInForm = ({ onChange, submitForm, signupLink }) => {
                             <TextField className={styles.fieldContainer}  name="password" type="password" onChange={onChange} placeholder="password" />
                         </Grid>
                         <Grid item xs={12}>
-                            <Button variant="contained" className={styles.field} color="primary" onClick={submitForm}>Sign in</Button>
+                            <Button variant="contained" className={`${styles.field} hjhhj`} color="primary" onClick={submitForm}>Sign in</Button>
                         </Grid>
                         <Grid>
                             <p>Create a new account <Link onClick={signupLink} to="/signin">Signup</Link></p>

@@ -10,19 +10,25 @@ const useStyles = makeStyles({
         marginBottom: 10,
     },
     field: {
-        width: '100%',
-        border: '1px solid #ccc',
-        borderRadius: 10,
-        padding: 10
+        width: '48%',
+        border: 'none',
+        borderRadius: 6,
+        padding: 8,
+        background: '#0180ff',
+        marginRight: '2%',
+        boxShadow: 'none',
     },
     button: {
         width: '50%'
     },
+    formStyle: {
+        maxWidth: 350,
+    }
 });
 const SignUpForm = ({ onChange, submitForm, goToSignIn }) => {
     const classes = useStyles();
     return (
-        <Card>
+        <Card className={classes.formStyle}>
             <CardContent>
                 <Container>
                     <Grid container alignContent="center" alignItems="center" justify="center">
@@ -40,7 +46,7 @@ const SignUpForm = ({ onChange, submitForm, goToSignIn }) => {
                             <TextField className={classes.fieldContainer} name="email" onChange={onChange} placeholder="email" />
                         </Grid>
                         <Grid item xs={12} alignContent="center" alignItems="center" justify="center">
-                            <Button  className={classes.button} variant="contained" color="primary" onClick={submitForm}>Sign up</Button>
+                            <Button  className={classes.field} variant="contained" color="primary" onClick={submitForm}>Sign up</Button>
                             <Button  className={classes.button} variant="contained" onClick={goToSignIn}>Sign in</Button>
                         </Grid>
                     </Grid>

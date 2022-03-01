@@ -14,10 +14,12 @@ const initialFormState = {
 
 const useStyles = makeStyles({
     loginForm: {
-        background: '#eee',
-        width: '100vw',
-        height: '100vh',
+        height: 'calc(100vh - 8px)',
         display: 'flex',
+        border: '4px solid #0180ff',
+        justifyContent: 'center',
+        alignItems: 'center',
+        background: '#0180ff0a'
     },
 });
 const Login = (props) => {
@@ -78,9 +80,9 @@ const Login = (props) => {
     return (
         <div className={classes.loginForm}>
             <Container>
-                <Grid container>
+                <Grid container className="ddd">
                     <Grid item xs={12}>
-                    <div style={{ display: 'flex', justifyContent: 'center', width: '98%', marginTop: 100 }} >
+                    <div style={{ display: 'flex', justifyContent: 'center' }} >
                         {formType === 'signup' && <SignUpForm onChange={onChange} submitForm={signUp} goToSignIn={goToSignIn} />}
                         {formType === 'confirmSignup' && <ConfirmSugnupForm onChange={onChange} submitForm={confirmSignUp} />}
                         {formType === 'signIn' && (
