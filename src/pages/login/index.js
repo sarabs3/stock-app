@@ -38,6 +38,7 @@ const Login = (props) => {
         try {
         const { username, code, password } = formState;
         await Auth.forgotPasswordSubmit(username, code, password);
+        setFormState({ ...formState, formType: "signIn" });
         } catch (e) {
             setError(e.message);
             console.log("error", e);
