@@ -66,6 +66,18 @@ const showTodayTrades = () => {
     updateDayTrade(true);
     updateTodayTrades(trades.filter(f => moment(f.createdDate).format('DD MMM, yyyy') === moment().format('DD MMM, yyyy')));
 };
+
+const editTrade = (row) => {
+    history.push({
+        pathname: `/trade/edit/${row.id}`,
+        state: {
+            item: row,
+            quantity: row.quantity,
+            price: row.price
+        }
+    })
+};
+
 const renderTradeModal = () => (
     <Modal
         open={open}
@@ -131,7 +143,8 @@ const renderTradeModal = () => (
                                                 <TableCell>{row.totalAmount}</TableCell>
                                                 <TableCell>{row.expectedProfit}</TableCell>
                                                 <TableCell align="right">
-                                                    <Button variant="outlined" onClick={() => history.push({ pathname: `/trade/edit/${row.id}`, state: { item: row, quantity: row.quantity, price: (row.price * 1.03).toFixed(2) }})} >Complete</Button>
+                                                    <Button onClick={() => editTrade(row)}>Edit</Button>
+                                                    <Button variant="outlined" onClick={() => history.push({ pathname: `/trade/complete/${row.id}`, state: { item: row, quantity: row.quantity, price: (row.price * 1.03).toFixed(2) }})} >Complete</Button>
                                                     <Button variant="icon" onClick={() => deleteTrade(row.id)} >Delete</Button>
                                                     </TableCell>
                                                 </TableRow>
@@ -149,7 +162,8 @@ const renderTradeModal = () => (
                                     <TableCell>{row.totalAmount}</TableCell>
                                     <TableCell>{row.expectedProfit}</TableCell>
                                     <TableCell align="right">
-                                        <Button variant="outlined" onClick={() => history.push({ pathname: `/trade/edit/${row.id}`, state: { item: row, quantity: row.quantity, price: (row.price * 1.03).toFixed(2) }})} >Complete</Button>
+                                        <Button onClick={() => editTrade(row)}>Edit</Button>
+                                        <Button variant="outlined" onClick={() => history.push({ pathname: `/trade/complete/${row.id}`, state: { item: row, quantity: row.quantity, price: (row.price * 1.03).toFixed(2) }})} >Complete</Button>
                                         <Button variant="icon" onClick={() => deleteTrade(row.id)} >Delete</Button>
                                         </TableCell>
                                     </TableRow>

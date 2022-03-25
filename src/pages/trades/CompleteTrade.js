@@ -12,27 +12,62 @@ import styling from './EditTrade.css';
 
 const initialFormState = {
   quantity: 0,
-  createdDate: moment().format("yyyy-MM-DD"),   
+  tradeDate: moment().format("yyyy-MM-DD"),   
 price: 0 };
 
-const EditTrade = (props) => {
+const CompleteTrade = (props) => {
     const classes = styling();
     const [formValues, setFormValues] = useState(initialFormState);
     const [loading, setLoading] = useState(false);
 
     const submit = async () => {
+
+        // If the quantity is same then update the current trade to be completed
         const quantity = parseInt(formValues.quantity);
         const price = parseFloat(formValues.price);
+        if (quantity === props.location?.state?.quantity) {
+            setLoading(true);
+            await DataStore.save(UserTrades.copyOf(props.location?.state?.item, item => {
+                item.tradeDate = formValues.tradeDate;
+                item.target = price;
+                item.totalAmount = parseFloat((price * quantity).toFixed(2));
+                item.expectedProfit = parseFloat((quantity * (price - parseFloat(props.location?.state?.item?.price))).toFixed(2));
+                return item;
+            }));
+            setLoading(false);
+            setFormValues({ ...initialFormState });
+            return;
+        }
+
+        // else create another trade with remaining quanity and update the current one with traded quantity and complete the trade.
+        const remainingQuantity = props.location?.state?.quantity - quantity;
         setLoading(true);
+
+        const expectedProfit = parseFloat((remainingQuantity * (parseFloat(props.location?.state?.item?.target) - parseFloat(props.location?.state?.item?.price))).toFixed(2));
+        const expectedProfit2 = parseFloat((quantity * (price - parseFloat(props.location?.state?.item?.price))).toFixed(2));;
+        if (!expectedProfit || !expectedProfit2) {
+            alert('error');
+            return;
+        }
+        const payload = {
+            ...props.location?.state?.item,
+            quantity: remainingQuantity,
+            totalAmount: parseFloat((price * remainingQuantity).toFixed(2)),
+            expectedProfit: expectedProfit,
+
+        };
+        await DataStore.save(
+            new UserTrades(payload)
+        );
+        
         await DataStore.save(UserTrades.copyOf(props.location?.state?.item, item => {
-            item.price = price;
             item.quantity = quantity;
-            item.createdDate = formValues.createdDate;
+            item.target = price;
             item.totalAmount = parseFloat((price * quantity).toFixed(2));
+            item.tradeDate = formValues.tradeDate;
+            item.expectedProfit = expectedProfit2;
             return item;
         }));
-        setLoading(false);
-        setFormValues({ ...initialFormState });
         setLoading(false);
     }
 
@@ -69,7 +104,7 @@ const EditTrade = (props) => {
                                 <TextField
                                     label="Traded Date"
                                     type="date"
-                                    name="createdDate"
+                                    name="tradeDate"
                                     defaultValue={moment().format("yyyy-MM-DD")}
                                     className={classes.textField}
                                     InputLabelProps={{
@@ -108,7 +143,7 @@ const EditTrade = (props) => {
                                         </tr>
                                         <tr>
                                             <td className={classes.title}>Date:</td>
-                                            <td>{formValues.createdDate}</td>
+                                            <td>{formValues.tradeDate}</td>
                                         </tr>
                                         <tr>
                                             <td className={classes.title}>Quantity:</td>
@@ -134,4 +169,4 @@ const EditTrade = (props) => {
     )
 }
 
-export default EditTrade;
+export default CompleteTrade;
