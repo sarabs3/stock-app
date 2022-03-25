@@ -6,6 +6,7 @@ import SignInForm from '../../components/signinForm';
 import ConfirmSugnupForm from '../../components/confirmSignupForm';
 import Welcome from '../../components/Welcome';
 import { Container, Grid } from '@material-ui/core';
+import ResetForm from '../../components/ResetPasswotd';
 
 
 const initialFormState = {
@@ -20,14 +21,27 @@ const useStyles = makeStyles({
         display: 'flex',
     },
 });
+const PasswordResetError = 'PasswordResetRequiredException';
+
 const Login = (props) => {
     const classes = useStyles();
     const [formState, setFormState] = useState(initialFormState);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     function onChange (e) {
         e.persist();
         setFormState({ ...formState, [e.target.name]: e.target.value });
+    }
+
+    async function recoverPassword () {
+        try {
+        const { username, code, password } = formState;
+        await Auth.forgotPasswordSubmit(username, code, password);
+        } catch (e) {
+            setError(e.message);
+            console.log("error", e);
+        }
     }
 
     async function signUp () {
@@ -41,10 +55,17 @@ const Login = (props) => {
         setFormState({ ...formState, formType: "signIn" });
     }
     async function signIn () {
-        setLoading(true);
-        const { username, password } = formState;
-        await Auth.signIn(username, password);
-        props.history.push("/dashboard")
+        try {
+            setLoading(true);
+            const { username, password } = formState;
+            await Auth.signIn(username, password);
+            props.history.push("/dashboard")
+        } catch (e) {
+            if (e.code === PasswordResetError)
+            console.log("error", e);
+            setLoading(false);
+            setFormState({ ...formState, formType: 'resetPassword'});
+        }
     }
     async function logout () {
         await Auth.signOut();
@@ -72,25 +93,29 @@ const Login = (props) => {
 
 
     const {formType} = formState;
-    if (loading) {
-        return <p>Loading...</p>
-    }
+    const isSignUp = !loading && formType === 'signup';
+    const isConfirmSignup = !loading && formType === 'confirmSignup';
+    const isSign = !loading && formType === 'signIn';
+    const isSignedIn = !loading && formType === 'signedIn';
+    const isResetPassword = !loading && formType === 'resetPassword';
     return (
         <div className={classes.loginForm}>
             <Container>
                 <Grid container>
                     <Grid item xs={12}>
                     <div style={{ display: 'flex', justifyContent: 'center', width: '98%', marginTop: 100 }} >
-                        {formType === 'signup' && <SignUpForm onChange={onChange} submitForm={signUp} goToSignIn={goToSignIn} />}
-                        {formType === 'confirmSignup' && <ConfirmSugnupForm onChange={onChange} submitForm={confirmSignUp} />}
-                        {formType === 'signIn' && (
+                        {loading && <p>Loading...</p>}
+                        {isSignUp && <SignUpForm onChange={onChange} submitForm={signUp} goToSignIn={goToSignIn} />}
+                        {isConfirmSignup && <ConfirmSugnupForm onChange={onChange} submitForm={confirmSignUp} />}
+                        {isSign && (
                             <SignInForm
                                 signupLink={() => setFormState({ ...formState, formType: "signup" })}
                                 onChange={onChange}
                                 submitForm={signIn}
                             />
                         )}
-                        {formType === 'signedIn' && <Welcome signOut={logout} />}
+                        {isSignedIn && <Welcome signOut={logout} />}
+                        {isResetPassword && <ResetForm error={error} onChange={onChange} submitForm={recoverPassword} />}
                     </div>
 
                     </Grid>
