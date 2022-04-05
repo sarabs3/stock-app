@@ -23,12 +23,14 @@ const EditTrade = (props) => {
     const submit = async () => {
         const quantity = parseInt(formValues.quantity);
         const price = parseFloat(formValues.price);
+        const target = parseFloat(formValues.target);
         setLoading(true);
         await DataStore.save(UserTrades.copyOf(props.location?.state?.item, item => {
             item.price = price;
             item.quantity = quantity;
             item.createdDate = formValues.createdDate;
             item.totalAmount = parseFloat((price * quantity).toFixed(2));
+            item.target = target;
             return item;
         }));
         setLoading(false);
@@ -45,6 +47,7 @@ const EditTrade = (props) => {
     
     useEffect(() => {
         if (props.location.state) {
+            console.log("props.location.state", props.location.state)
             setFormValues((prevState) => ({ ...prevState, ...props.location.state }))
         }
     }, [props.location?.state]);
@@ -101,6 +104,17 @@ const EditTrade = (props) => {
                             </Grid>
                             
                             <Grid item xs={12}>
+                                <TextField
+                                    id="target"
+                                    label="Sell Price"
+                                    className={classes.input}
+                                    name="target"
+                                    value={formValues.target}
+                                    onChange={(e) => updateField(e.target.name, e.target.value)}
+                                />
+                            </Grid>
+                            
+                            <Grid item xs={12}>
                             <div className={classes.dataToBeEntered}>
                                     <table>
                                         <tr>
@@ -117,6 +131,10 @@ const EditTrade = (props) => {
                                         <tr>
                                             <td className={classes.title}>Price:</td>
                                             <td>{formValues.price}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className={classes.title}>Sell Price:</td>
+                                            <td>{formValues.target}</td>
                                         </tr>
                                     </table>
                                 </div>

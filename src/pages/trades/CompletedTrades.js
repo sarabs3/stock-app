@@ -12,9 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Title from '../../components/Title';
 import moment from 'moment';
-import { DataStore } from '@aws-amplify/datastore';
 import { TextField } from '@material-ui/core';
-import { UserTrades } from '../../models';
 import { Modal } from '@material-ui/core';
 import TradeTable from './TradesTable';
 import useTrade from '../../hooks/trades';
@@ -52,11 +50,7 @@ const CompletedTrades = (props) => {
         updateTrades([...userTrades.filter(f => f.tradeDate)])
     }, [userTrades]);
 
-    const deleteTrade = async (id) => {
-        const modelToDelete = await DataStore.query(UserTrades, id);
-        DataStore.delete(modelToDelete);
-        window.location.reload();
-    };
+    
 
   
     const handleClose = () => {
@@ -107,28 +101,28 @@ const renderTradeModal = () => (
                             <Table size="small">
                                 <TableHead>
                                 <TableRow>
-                                    <TableCell>Date</TableCell>
+                                    <TableCell>Buy Date</TableCell>
                                     <TableCell>Scrip Name</TableCell>
-                                    <TableCell>Action</TableCell>
                                     <TableCell>Quantity</TableCell>
                                     <TableCell>Buy Price</TableCell>
-                                    <TableCell>Targets</TableCell>
-                                    <TableCell>Total Amount</TableCell>
-                                    <TableCell>Expected Profit</TableCell>
-                                    <TableCell>Trade Date</TableCell>
+                                    <TableCell>Sell Price</TableCell>
+                                    <TableCell>Total</TableCell>
+                                    <TableCell>Profit</TableCell>
+                                    <TableCell>Sell Date</TableCell>
+                                    <TableCell>Actions</TableCell>
                                 </TableRow>
                                 </TableHead>
                                 <TableBody>
                                 {showDayTrade ? (
                                     <>
                                         {todayTrades.length > 0 && todayTrades.map((row) => (
-                                            <TradeTable data={row} key={row.id} />
+                                            <TradeTable data={row} key={row.id} history={props.history} />
                                         ))}
                                     </>
                                 ) : (
                                     <>
                                         {trades && trades.map((row) => (
-                                            <TradeTable data={row} key={row.id} />
+                                            <TradeTable data={row} key={row.id} history={props.history} />
                                         ))}
                                     </>
                                 )}
