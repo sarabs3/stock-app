@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import AppLayout from "../../components/layout/AppLayout";
 import Table from '@material-ui/core/Table';
 import Button from '@material-ui/core/Button';
@@ -18,6 +18,10 @@ import { Modal, TextField } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import useTrade from '../../hooks/trades';
 
+import { DataGrid } from '@material-ui/data-grid';
+import { keys } from 'lodash';
+import { RowingTwoTone } from '@material-ui/icons';
+
 const useStyles = makeStyles({
     container: {
         width: '100%'
@@ -30,7 +34,7 @@ const TradesComponent = (props) => {
     const [showDayTrade, updateDayTrade] = useState(false);
     const [trades, updateTrades] = useState([
         {
-            id:1,
+            id: 1,
             tradeInitDate: new Date(),
             scripName: "ITC",
             action: "Buy",
@@ -42,7 +46,7 @@ const TradesComponent = (props) => {
         }
     ]);
     const userTrades = useTrade();
-    
+
     useEffect(() => {
         if (userTrades.length === 0) return;
         updateTrades([...userTrades.filter(f => !f.tradeDate)])
@@ -53,46 +57,138 @@ const TradesComponent = (props) => {
         window.location.reload();
     };
 
-  
+
     const handleClose = () => {
-      setOpen(false);
+        setOpen(false);
     };
     const updateField = (value) => {
         updateDayTrade(true);
         updateTodayTrades(trades.filter(f => f.createdDate === value));
     }
-const classes = useStyles();
-const showTodayTrades = () => {
-    updateDayTrade(true);
-    updateTodayTrades(trades.filter(f => moment(f.createdDate).format('DD MMM, yyyy') === moment().format('DD MMM, yyyy')));
-};
+    const classes = useStyles();
+    const showTodayTrades = () => {
+        updateDayTrade(true);
+        updateTodayTrades(trades.filter(f => moment(f.createdDate).format('DD MMM, yyyy') === moment().format('DD MMM, yyyy')));
+    };
 
-const editTrade = (row) => {
-    history.push({
-        pathname: `/trade/edit/${row.id}`,
-        state: {
-            item: row,
-            quantity: row.quantity,
-            price: row.price
-        }
-    })
-};
+    const editTrade = (row) => {
+        history.push({
+            pathname: `/trade/edit/${row.id}`,
+            state: {
+                item: row,
+                quantity: row.quantity,
+                price: row.price
+            }
+        })
+    };
 
-const renderTradeModal = () => (
-    <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-    >
-        <div>   
-            <h2 id="simple-modal-title">Text in a modal</h2>
-            <p id="simple-modal-description">
-                Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </p>
-        </div>
-    </Modal>
-);
+    const renderTradeModal = () => (
+        <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="simple-modal-title"
+            aria-describedby="simple-modal-description"
+        >
+            <div>
+                <h2 id="simple-modal-title">Text in a modal</h2>
+                <p id="simple-modal-description">
+                    Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+                </p>
+            </div>
+        </Modal>
+    );
+    const rows=  trades.map((row) => {
+
+return{
+        id :row.id,
+        key:row.id,
+        date:moment(row.createdDate).format('DD MMM, yyyy'),
+        scrip:row.Scrips?.name,
+        action:row.action,
+        quantity:row.quantity,
+        buyPrice:row.buyPrice,
+        target:row.target,
+        totalAmount:row.totalAmount,
+        expectedProft:row.expectedProft,
+}
+})
+    
+
+
+    
+       
+    
+        
+        
+        
+
+    const columns = [
+        {
+            field:"id",
+            headerName:"id",
+
+        },
+
+        {
+            
+            field: 'date',
+            headerName: 'Date',
+            width: 130,
+            editable: true,
+        },
+        {
+            field: 'scrip',
+            headerName: 'Scrip',
+            width: 130,
+            editable: true,
+        },
+        {
+            field: 'action',
+            headerName: 'Action',
+            width: 130,
+            editable: true,
+
+        },
+        {
+            field: 'quantity',
+            headerName: 'Quantity',
+            width: 130,
+            editable: true,
+        },
+        {
+            field: 'buyprice',
+            headerName: 'Buy price',
+            width: 130,
+            editable: true,
+        },
+        {
+            field: 'target',
+            headerName: 'Target',
+            width: 130,
+            editable: true,
+
+        },
+        {
+            field: 'totalAmount',
+            headerName: 'Total Amount',
+            width: 150,
+            editable: true,
+        },
+        {
+            field: 'expectedProfit',
+            headerName: 'Expected Profit',
+            width: 150,
+            editable: true,
+        },
+    ];
+
+
+    
+
+
+
+
+
     return (
         <AppLayout pageName="Trades">
             <Container className={classes.container}>
@@ -105,17 +201,28 @@ const renderTradeModal = () => (
                             <Button onClick={() => props.history.push("/trade/completed")} variant="contained">View Completed Trade</Button>
                             <Button onClick={showTodayTrades}>Today Orders</Button>
                             <TextField
-                                    label="Created Date"
-                                    type="date"
-                                    name="createdDate"
-                                    defaultValue={moment().format("yyyy-MM-DD")}
-                                    className={classes.textField}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    onChange={(e) => updateField(e.target.value)}
+                                label="Created Date"
+                                type="date"
+                                name="createdDate"
+                                defaultValue={moment().format("yyyy-MM-DD")}
+                                className={classes.textField}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                onChange={(e) => updateField(e.target.value)}
+                            />
+
+                            <div style={{ height: 400, width: '100%' }}>
+                                <DataGrid
+
+                                 rows={rows}
+                                    columns={columns}
+                                    pageSize={5}
+                                    checkboxSelection
+                                    disableSelectionOnClick
                                 />
-                            <Table size="small">
+                            </div>
+                              {/* <Table size="small">
                                 <TableHead>
                                 <TableRow>
                                     <TableCell>Date</TableCell>
@@ -171,20 +278,20 @@ const renderTradeModal = () => (
                                 </>
                                     )}
                                 </TableBody>
-                            </Table>
+                                        </Table>  */}
                         </Paper>
                     </Grid>
                 </Grid>
-                <Grid>
+                <Grid> 
                     <Paper>
                         <Title>Stats</Title>
                         <div>
                             <h3>Total Buy Amount</h3>
-                            <span>{todayTrades.reduce((a,b) => a+b.totalAmount, 0)}</span>
+                            <span>{todayTrades.reduce((a, b) => a + b.totalAmount, 0)}</span>
                         </div>
                     </Paper>
                 </Grid>
-            </Container>    
+            </Container>
         </AppLayout>
     )
 }
