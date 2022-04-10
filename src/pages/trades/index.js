@@ -21,6 +21,7 @@ import useTrade from '../../hooks/trades';
 import { DataGrid } from '@material-ui/data-grid';
 import { keys } from 'lodash';
 import { RowingTwoTone } from '@material-ui/icons';
+import { number } from 'prop-types';
 
 const useStyles = makeStyles({
     container: {
@@ -97,10 +98,10 @@ const TradesComponent = (props) => {
             </div>
         </Modal>
     );
-    const rows=  trades.map((row) => {
+    const rows=  trades.map((row,index) => {
 
 return{
-        id :row.id,
+        id :index+ 1,
         key:row.id,
         date:moment(row.createdDate).format('DD MMM, yyyy'),
         scrip:row.Scrips?.name,
@@ -125,7 +126,10 @@ return{
     const columns = [
         {
             field:"id",
-            headerName:"id",
+            headerName:"ID",
+            type:"id",
+            width:100,
+
 
         },
 
@@ -133,6 +137,7 @@ return{
             
             field: 'date',
             headerName: 'Date',
+            type:"date",
             width: 130,
             editable: true,
         },
@@ -152,18 +157,21 @@ return{
         {
             field: 'quantity',
             headerName: 'Quantity',
+            type:number,
             width: 130,
             editable: true,
         },
         {
             field: 'buyprice',
             headerName: 'Buy price',
+            type: number,
             width: 130,
             editable: true,
         },
         {
             field: 'target',
             headerName: 'Target',
+            type:number,
             width: 130,
             editable: true,
 
@@ -171,12 +179,14 @@ return{
         {
             field: 'totalAmount',
             headerName: 'Total Amount',
+            type:number,
             width: 150,
             editable: true,
         },
         {
             field: 'expectedProfit',
             headerName: 'Expected Profit',
+            type :number,
             width: 150,
             editable: true,
         },
