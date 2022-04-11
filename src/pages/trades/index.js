@@ -28,24 +28,13 @@ const TradesComponent = (props) => {
     const [todayTrades, updateTodayTrades] = useState([]);
     const history = useHistory();
     const [showDayTrade, updateDayTrade] = useState(false);
-    const [trades, updateTrades] = useState([
-        {
-            id:1,
-            tradeInitDate: new Date(),
-            scripName: "ITC",
-            action: "Buy",
-            quantity: "200",
-            buyPrice: "204",
-            sellPrice: "",
-            totalAmount: "",
-            profit: "",
-        }
-    ]);
+    const [trades, updateTrades] = useState([]);
     const userTrades = useTrade();
     
     useEffect(() => {
         if (userTrades.length === 0) return;
-        updateTrades([...userTrades.filter(f => !f.tradeDate)])
+        updateTrades([...userTrades.filter(f => !f.tradeDate)]);
+        showTodayTrades([...userTrades.filter(f => !f.tradeDate)]);
     }, [userTrades]);
     const deleteTrade = async (id) => {
         const modelToDelete = await DataStore.query(UserTrades, id);
@@ -62,8 +51,12 @@ const TradesComponent = (props) => {
         updateTodayTrades(trades.filter(f => f.createdDate === value));
     }
 const classes = useStyles();
-const showTodayTrades = () => {
+const showTodayTrades = (loadedTrades) => {
     updateDayTrade(true);
+    if (loadedTrades) {
+        updateTodayTrades(loadedTrades.filter(f => moment(f.createdDate).format('DD MMM, yyyy') === moment().format('DD MMM, yyyy')));
+        return;
+    }
     updateTodayTrades(trades.filter(f => moment(f.createdDate).format('DD MMM, yyyy') === moment().format('DD MMM, yyyy')));
 };
 
