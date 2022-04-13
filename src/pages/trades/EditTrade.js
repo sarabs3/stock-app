@@ -35,7 +35,7 @@ const EditTrade = (props) => {
         }));
         setLoading(false);
         setFormValues({ ...initialFormState });
-        setLoading(false);
+        props.history.push(`/trades/${props.location?.state?.item.id}`)
     }
 
     const updateField = (key, value) => {

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import AppLayout from '../../components/layout/AppLayout';
 import { UserTrades } from '../../models';
 
-const ViewTrade = ({match}) => {
+const ViewTrade = ({match, history}) => {
     const [trade, setTrade] = useState({});
 
     useEffect(() => {
@@ -16,6 +16,31 @@ const ViewTrade = ({match}) => {
             getTradeDetails(match?.params?.id)
         }
     }, [match?.params?.id]);
+
+    const editTrade = () => {
+        history.push({
+            pathname: `/trade/edit/${trade.id}`,
+            state: {
+                item: trade,
+                quantity: trade.quantity,
+                price: trade.price
+            }
+        })
+    };
+    const completeTrade = () => {
+        history.push({
+            pathname: `/trade/complete/${trade.id}`,
+            state: {
+                item: trade,
+                quantity: trade.quantity,
+                price: (trade.price * 1.03).toFixed(2) }
+            })
+    }
+    const deleteTrade = async () => {
+        const modelToDelete = await DataStore.query(UserTrades, trade.id);
+        DataStore.delete(modelToDelete);
+        history.push("/trade");
+    };
     return (
         <AppLayout>
             <Container>
@@ -50,9 +75,9 @@ const ViewTrade = ({match}) => {
                         </Table>
                 </CardContent>
                 <CardActions>
-                    <Button size="small">Edit</Button>
-                    <Button size="small">Complete</Button>
-                    <Button size="small">Delete</Button>
+                    <Button size="small" onClick={editTrade}>Edit</Button>
+                    <Button size="small" onClick={completeTrade}>Complete</Button>
+                    <Button size="small" onClick={deleteTrade}>Delete</Button>
                 </CardActions>
 
                 </Card>
