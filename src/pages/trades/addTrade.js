@@ -41,12 +41,12 @@ const AddTrade = () => {
             target,
             expectedProfit: parseFloat((quantity * (target - price)).toFixed(2)),
         };
-        await DataStore.save(
+        const trade = await DataStore.save(
             new UserTrades(payload)
         );
         setLoading(false);
         setFormValues({ ...initialFormState });
-        history.push('/trade');
+        history.push(`/trades/${trade.id}`);
     }
     const updateField = (key, value) => {
         setFormValues((prevState) => ({

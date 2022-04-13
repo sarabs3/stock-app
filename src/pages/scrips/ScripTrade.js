@@ -24,19 +24,7 @@ const useStyles = makeStyles({
 const ScripTrade = (props) => {
     const [open, setOpen] = useState(false);
     const history = useHistory();
-    const [trades, updateTrades] = useState([
-        {
-            id:1,
-            tradeInitDate: new Date(),
-            scripName: "ITC",
-            action: "Buy",
-            quantity: "200",
-            buyPrice: "204",
-            sellPrice: "",
-            totalAmount: "",
-            profit: "",
-        }
-    ]);
+    const [trades, updateTrades] = useState([]);
     const userTrades = useTrade();
     useEffect(() => {
         if (userTrades.length === 0) return;
