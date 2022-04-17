@@ -9,6 +9,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import styling from './EditTrade.css';
+import { useHistory } from "react-router-dom";
 
 const initialFormState = {
   quantity: 0,
@@ -19,6 +20,7 @@ const CompleteTrade = (props) => {
     const classes = styling();
     const [formValues, setFormValues] = useState(initialFormState);
     const [loading, setLoading] = useState(false);
+    const history = useHistory();
 
     const submit = async () => {
 
@@ -36,6 +38,7 @@ const CompleteTrade = (props) => {
             }));
             setLoading(false);
             setFormValues({ ...initialFormState });
+            history.push('/completed');
             return;
         }
 
@@ -69,6 +72,7 @@ const CompleteTrade = (props) => {
             return item;
         }));
         setLoading(false);
+        history.push('/completed');
     }
 
     const updateField = (key, value) => {

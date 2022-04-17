@@ -33,24 +33,13 @@ const TradesComponent = (props) => {
     const [todayTrades, updateTodayTrades] = useState([]);
     const history = useHistory();
     const [showDayTrade, updateDayTrade] = useState(false);
-    const [trades, updateTrades] = useState([
-        {
-            id: 1,
-            tradeInitDate: new Date(),
-            scripName: "ITC",
-            action: "Buy",
-            quantity: "200",
-            buyPrice: "204",
-            sellPrice: "",
-            totalAmount: "",
-            profit: "",
-        }
-    ]);
+    const [trades, updateTrades] = useState([]);
     const userTrades = useTrade();
 
     useEffect(() => {
         if (userTrades.length === 0) return;
-        updateTrades([...userTrades.filter(f => !f.tradeDate)])
+        updateTrades([...userTrades.filter(f => !f.tradeDate)]);
+        showTodayTrades([...userTrades.filter(f => !f.tradeDate)]);
     }, [userTrades]);
     const deleteTrade = async (id) => {
         const modelToDelete = await DataStore.query(UserTrades, id);
@@ -66,63 +55,24 @@ const TradesComponent = (props) => {
         updateDayTrade(true);
         updateTodayTrades(trades.filter(f => f.createdDate === value));
     }
-    const classes = useStyles();
-    const showTodayTrades = () => {
-        updateDayTrade(true);
-        updateTodayTrades(trades.filter(f => moment(f.createdDate).format('DD MMM, yyyy') === moment().format('DD MMM, yyyy')));
-    };
-
-    const editTrade = (row) => {
-        history.push({
-            pathname: `/trade/edit/${row.id}`,
-            state: {
-                item: row,
-                quantity: row.quantity,
-                price: row.price
-            }
-        })
-    };
-
-    const renderTradeModal = () => (
-        <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="simple-modal-title"
-            aria-describedby="simple-modal-description"
-        >
-            <div>
-                <h2 id="simple-modal-title">Text in a modal</h2>
-                <p id="simple-modal-description">
-                    Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-                </p>
-            </div>
-        </Modal>
-    );
-    const rows=  trades.map((row,index) => {
-
-return{
-        id :index+ 1,
-        key:row.id,
-        date:moment(row.createdDate).format('DD MMM, yyyy'),
-        scrip:row.Scrips?.name,
-        action:row.action,
-        quantity:row.quantity,
-        buyPrice:row.buyPrice,
-        target:row.target,
-        totalAmount:row.totalAmount,
-        expectedProft:row.expectedProft,
-}
-})
-    
+const classes = useStyles();
 
 
-    
-       
-    
-        
-        
-        
+const rows=  trades.map((row,index) => {
 
+    return{
+            id :index+ 1,
+            key:row.id,
+            date:moment(row.createdDate).format('DD MMM, yyyy'),
+            scrip:row.Scrips?.name,
+            action:row.action,
+            quantity:row.quantity,
+            buyPrice:row.buyPrice,
+            target:row.target,
+            totalAmount:row.totalAmount,
+            expectedProft:row.expectedProft,
+    }
+    })
     const columns = [
         {
             field:"id",
@@ -194,11 +144,41 @@ return{
 
 
     
+const showTodayTrades = (loadedTrades) => {
+    updateDayTrade(true);
+    if (loadedTrades) {
+        updateTodayTrades(loadedTrades.filter(f => moment(f.createdDate).format('DD MMM, yyyy') === moment().format('DD MMM, yyyy')));
+        return;
+    }
+    updateTodayTrades(trades.filter(f => moment(f.createdDate).format('DD MMM, yyyy') === moment().format('DD MMM, yyyy')));
+};
 
+const editTrade = (row) => {
+    history.push({
+        pathname: `/trade/edit/${row.id}`,
+        state: {
+            item: row,
+            quantity: row.quantity,
+            price: row.price
+        }
+    })
+};
 
-
-
-
+const renderTradeModal = () => (
+    <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+    >
+        <div>   
+            <h2 id="simple-modal-title">Text in a modal</h2>
+            <p id="simple-modal-description">
+                Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            </p>
+        </div>
+    </Modal>
+);
     return (
         <AppLayout pageName="Trades">
             <Container className={classes.container}>

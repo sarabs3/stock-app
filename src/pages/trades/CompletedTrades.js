@@ -26,19 +26,7 @@ const CompletedTrades = (props) => {
     const [open, setOpen] = useState(false);
     const [todayTrades, updateTodayTrades] = useState([]);
     const [showDayTrade, updateDayTrade] = useState(false);
-    const [trades, updateTrades] = useState([
-        {
-            id:1,
-            tradeInitDate: new Date(),
-            scripName: "ITC",
-            action: "Buy",
-            quantity: "200",
-            buyPrice: "204",
-            sellPrice: "",
-            totalAmount: "",
-            profit: "",
-        }
-    ]);
+    const [trades, updateTrades] = useState([]);
     const userTrades = useTrade();
     
     const updateField = (value) => {
@@ -47,7 +35,8 @@ const CompletedTrades = (props) => {
     }
     useEffect(() => {
         if (userTrades.length === 0) return;
-        updateTrades([...userTrades.filter(f => f.tradeDate)])
+        updateTrades([...userTrades.filter(f => f.tradeDate)]);
+        showTodayTrades([...userTrades.filter(f => f.tradeDate)]);
     }, [userTrades]);
 
     
@@ -57,8 +46,12 @@ const CompletedTrades = (props) => {
       setOpen(false);
     };
 const classes = useStyles();
-const showTodayTrades = () => {
+const showTodayTrades = (loadedTrades) => {
     updateDayTrade(true);
+    if (loadedTrades) {
+        updateTodayTrades(loadedTrades.filter(f => moment(f.tradeDate).format('DD MMM, yyyy') === moment().format('DD MMM, yyyy')));
+        return;
+    }
     updateTodayTrades(trades.filter(f => moment(f.tradeDate).format('DD MMM, yyyy') === moment().format('DD MMM, yyyy')));
 };
 const renderTradeModal = () => (
