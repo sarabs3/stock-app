@@ -27,7 +27,6 @@ const useStyles = makeStyles({
 const ScripTrade = (props) => {
     const deleteTrade = async (id) => {
         try {
-            console.log("delete trade")
             const modelToDelete = await DataStore.query(UserTrades, id);
             DataStore.delete(modelToDelete);
             window.location.reload();
