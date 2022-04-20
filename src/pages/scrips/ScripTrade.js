@@ -15,6 +15,9 @@ import moment from 'moment';
 import { Modal } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import useTrade from '../../hooks/trades';
+import { DataStore } from 'aws-amplify';
+import { UserTrades } from '../../models';
+
 
 const useStyles = makeStyles({
     container: {
@@ -22,6 +25,16 @@ const useStyles = makeStyles({
     }
 });
 const ScripTrade = (props) => {
+    const deleteTrade = async (id) => {
+        try {
+            const modelToDelete = await DataStore.query(UserTrades, id);
+            DataStore.delete(modelToDelete);
+            window.location.reload();
+        } catch (e) {
+            console.log("error", e)
+        }
+    };
+
     const [open, setOpen] = useState(false);
     const history = useHistory();
     const [trades, updateTrades] = useState([]);
@@ -91,7 +104,7 @@ const renderTradeModal = () => (
                                     <TableCell>{moment(row.tradeDate).format('DD MMM, yyyy')}</TableCell>
                                     <TableCell align="right">
                                         <Button variant="outlined" onClick={() => history.push({ pathname: `/trade/complete/${row.id}`, state: { item: row, quantity: row.quantity, price: (row.price * 1.03).toFixed(2) }})} >Complete Trade</Button>
-                                        <Button variant="icon">Delete</Button>
+                                        <Button onClick={() => deleteTrade(row.id)} variant="icon">Delete</Button>
                                         </TableCell>
                                     </TableRow>
                                 ))}
