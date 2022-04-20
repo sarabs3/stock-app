@@ -73,11 +73,11 @@ const EditTrade = (props) => {
                                     label="Traded Date"
                                     type="date"
                                     name="createdDate"
-                                    defaultValue={moment().format("yyyy-MM-DD")}
                                     className={classes.textField}
                                     InputLabelProps={{
                                         shrink: true,
                                     }}
+                                    value={formValues.item?.createdDate}
                                     onChange={(e) => updateField(e.target.name, e.target.value)}
                                 />
                             </Grid>                  

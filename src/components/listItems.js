@@ -5,6 +5,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PeopleIcon from '@material-ui/icons/People';
+import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
 import { Link } from 'react-router-dom';
 
 export const mainListItems = (
@@ -21,6 +22,12 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Trades" />
     </ListItem>
+    <ListItem button component={Link} to="/trade/completed">
+      <ListItemIcon>
+        <DoneOutlineIcon />
+      </ListItemIcon>
+      <ListItemText primary="Completed Trade" />
+    </ListItem>
     <ListItem button to="/" component={Link}>
       <ListItemIcon>
         <PeopleIcon />
@@ -33,5 +40,7 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Add Scrip" />
     </ListItem>
+
+    
   </div>
 );
