@@ -49,20 +49,43 @@ const TradesComponent = (props) => {
   };
   const classes = useStyles();
 
-  const rows = trades.map((row, index) => {
-    return {
-      id: index + 1,
-      key: row.id,
-      date: moment(row.createdDate).format("DD MMM, yyyy"),
-      scrip: row.Scrips?.name,
-      action: row.action,
-      quantity: row.quantity,
-      buyPrice: row.buyPrice,
-      target: row.target,
-      totalAmount: row.totalAmount,
-      expectedProft: row.expectedProft,
-    };
-  });
+  const getRows = () => {
+    if (showDayTrade) {
+      console.log("todayTrades", todayTrades);
+      if (todayTrades.length>0) {
+
+        return todayTrades.length>0 && todayTrades.map((row, index) => {
+          return {
+            id: index + 1,
+            key: row.id,
+            date: moment(row.createdDate).format("DD MMM, yyyy"),
+            scrip: row.Scrips?.name,
+            action: row.action,
+            quantity: row.quantity,
+            buyPrice: row.price,
+            target: row.target,
+            totalAmount: row.totalAmount,
+            expectedProft: row.expectedProft,
+          };
+        });
+      } else {
+        return [];}
+    }
+    return trades.map((row, index) => {
+      return {
+        id: index + 1,
+        key: row.id,
+        date: moment(row.createdDate).format("DD MMM, yyyy"),
+        scrip: row.Scrips?.name,
+        action: row.action,
+        quantity: row.quantity,
+        buyPrice: row.price,
+        target: row.target,
+        totalAmount: row.totalAmount,
+        expectedProft: row.expectedProft,
+      };
+    }); 
+  };
   const columns = [
     {
       field: "id",
@@ -98,7 +121,7 @@ const TradesComponent = (props) => {
       editable: true,
     },
     {
-      field: "buyprice",
+      field: "buyPrice",
       headerName: "Buy price",
       type: number,
       width: 130,
@@ -210,7 +233,7 @@ const TradesComponent = (props) => {
 
               <div style={{ height: 400, width: "100%" }}>
                 <DataGrid
-                  rows={rows}
+                  rows={getRows()}
                   columns={columns}
                   pageSize={5}
                   checkboxSelection
@@ -235,3 +258,14 @@ const TradesComponent = (props) => {
 };
 
 export default TradesComponent;
+
+                            
+                              
+                                   
+                                           
+                                          
+                                       
+                                        
+                                   
+                             
+                                       
