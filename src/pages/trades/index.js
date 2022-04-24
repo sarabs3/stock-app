@@ -151,9 +151,15 @@ const TradesComponent = (props) => {
     },
   ];
   
-  let tradeDate=props.location.state.date;
+  const tradeDate = props.location?.state?.date;
 
-  console.log(tradeDate)
+  useEffect(() => {
+    if (tradeDate) {
+      updateTodayTrades(userTrades.filter((f) => {
+        return f.createdDate === tradeDate
+      }));
+    }
+  }, [tradeDate, userTrades]);
 
   const showTodayTrades = (loadedTrades) => {
     updateDayTrade(true);
