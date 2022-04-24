@@ -77,7 +77,7 @@ const renderTradeModal = () => (
                     <Grid item xs={12} md={8} lg={12}>
                         <Paper>
                             <Title>Recent Trades</Title>
-                            <Button onClick={() => props.history.push("/trade/add")} variant="contained" color="primary">Add Trade</Button>
+                            <Button style={{marginRight:20}}onClick={() => props.history.push("/trade/add")} variant="contained" color="primary">Add Trade</Button>
                             <Button onClick={() => props.history.push("/trade")} variant="contained">View Trades</Button>
                             <Button onClick={showTodayTrades}>Today Orders</Button>
                             <TextField

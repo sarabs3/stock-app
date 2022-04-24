@@ -41,6 +41,15 @@ const ViewTrade = ({match, history}) => {
         DataStore.delete(modelToDelete);
         history.push("/trade");
     };
+    function navigtrade(){
+        history.push({
+            pathname:"/trade",
+            state:{
+                date:trade.createdDate,
+            }
+            
+        })
+    }
     return (
         <AppLayout>
             <Container>
@@ -78,6 +87,7 @@ const ViewTrade = ({match, history}) => {
                     <Button size="small" onClick={editTrade}>Edit</Button>
                     <Button size="small" onClick={completeTrade}>Complete</Button>
                     <Button size="small" onClick={deleteTrade}>Delete</Button>
+                    <Button size="small" onClick={navigtrade}>OK</Button>
                 </CardActions>
 
                 </Card>
