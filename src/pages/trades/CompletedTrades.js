@@ -78,12 +78,7 @@ const CompletedTrades = (props) => {
       </div>
     </Modal>
   );
-  const totalProfit = todayTrades.reduce((a, b) => a + b.expectedProfit, 0);
-  const totalAmount = todayTrades.reduce((a, b) => a + b.totalAmount, 0);
-  const percentageProfit = parseFloat(
-    (totalProfit / totalAmount) * 100
-  ).toFixed(2);
-  );
+  
 
   const totalProfit = todayTrades.reduce((a, b) => a + b.expectedProfit, 0);
   const totalAmount = todayTrades.reduce((a, b) => a + b.totalAmount, 0);
