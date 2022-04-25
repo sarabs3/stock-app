@@ -32,7 +32,7 @@ const TradesComponent = (props) => {
   useEffect(() => {
     if (userTrades.length === 0) return;
     updateTrades([...userTrades.filter((f) => !f.tradeDate)]);
-    showTodayTrades([...userTrades.filter((f) => !f.tradeDate)]);
+    // showTodayTrades([...userTrades.filter((f) => !f.tradeDate)]);
   }, [userTrades]);
   const deleteTrade = async (id) => {
     const modelToDelete = await DataStore.query(UserTrades, id);
@@ -48,15 +48,12 @@ const TradesComponent = (props) => {
     updateTodayTrades(trades.filter((f) => f.createdDate === value));
   };
   const classes = useStyles();
-
   const getRows = () => {
     if (showDayTrade) {
-      console.log("todayTrades", todayTrades);
       if (todayTrades.length>0) {
-
         return todayTrades.length>0 && todayTrades.map((row, index) => {
           return {
-            id: index + 1,
+            id: index+1,
             key: row.id,
             date: moment(row.createdDate).format("DD MMM, yyyy"),
             scrip: row.Scrips?.name,
@@ -73,7 +70,7 @@ const TradesComponent = (props) => {
     }
     return trades.map((row, index) => {
       return {
-        id: index + 1,
+        id: index+1,
         key: row.id,
         date: moment(row.createdDate).format("DD MMM, yyyy"),
         scrip: row.Scrips?.name,
@@ -149,6 +146,16 @@ const TradesComponent = (props) => {
       editable: true,
     },
   ];
+  
+  const tradeDate = props.location?.state?.date;
+
+  useEffect(() => {
+    if (tradeDate) {
+      updateTodayTrades(userTrades.filter((f) => {
+        return f.createdDate === tradeDate
+      }));
+    }
+  }, [tradeDate, userTrades]);
 
   const showTodayTrades = (loadedTrades) => {
     updateDayTrade(true);
@@ -197,6 +204,8 @@ const TradesComponent = (props) => {
       </div>
     </Modal>
   );
+
+  
   return (
     <AppLayout pageName="Trades">
       <Container className={classes.container}>
@@ -206,6 +215,9 @@ const TradesComponent = (props) => {
             <Paper>
               <Title>Recent Trades</Title>
               <Button
+              style={{marginRight:20}}
+                
+              
                 onClick={() => props.history.push("/trade/add")}
                 variant="contained"
                 color="primary"
@@ -223,21 +235,22 @@ const TradesComponent = (props) => {
                 label="Created Date"
                 type="date"
                 name="createdDate"
-                defaultValue={moment().format("yyyy-MM-DD")}
+                defaultValue={tradeDate}
                 className={classes.textField}
                 InputLabelProps={{
                   shrink: true,
                 }}
                 onChange={(e) => updateField(e.target.value)}
+                
               />
-
-              <div style={{ height: 400, width: "100%" }}>
+              
+              <div style={{ height: 700, width: "100%" }}>
                 <DataGrid
                   rows={getRows()}
                   columns={columns}
-                  pageSize={5}
-                  checkboxSelection
+                  pageSize={12}
                   disableSelectionOnClick
+                  onRowClick={({row}) => history.push(`trades/${row?.key}`)}
                 />
               </div>
             </Paper>
@@ -259,13 +272,3 @@ const TradesComponent = (props) => {
 
 export default TradesComponent;
 
-                            
-                              
-                                   
-                                           
-                                          
-                                       
-                                        
-                                   
-                             
-                                       

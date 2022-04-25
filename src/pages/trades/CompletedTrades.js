@@ -21,6 +21,9 @@ const useStyles = makeStyles({
   container: {
     width: "100%",
   },
+  button: {
+    marginTop: 20
+  },
 });
 const CompletedTrades = (props) => {
   const [open, setOpen] = useState(false);
@@ -93,6 +96,7 @@ const CompletedTrades = (props) => {
             <Paper>
               <Title>Recent Trades</Title>
               <Button
+                className={classes.button}
                 onClick={() => props.history.push("/trade/add")}
                 variant="contained"
                 color="primary"
