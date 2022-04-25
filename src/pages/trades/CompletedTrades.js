@@ -21,6 +21,9 @@ const useStyles = makeStyles({
   container: {
     width: "100%",
   },
+  button: {
+    marginTop: 20
+  },
 });
 const CompletedTrades = (props) => {
   const [open, setOpen] = useState(false);
@@ -78,7 +81,6 @@ const CompletedTrades = (props) => {
       </div>
     </Modal>
   );
-  
 
   const totalProfit = todayTrades.reduce((a, b) => a + b.expectedProfit, 0);
   const totalAmount = todayTrades.reduce((a, b) => a + b.totalAmount, 0);
@@ -94,7 +96,7 @@ const CompletedTrades = (props) => {
             <Paper>
               <Title>Recent Trades</Title>
               <Button
-                style={{marginRight:20}}
+                className={classes.button}
                 onClick={() => props.history.push("/trade/add")}
                 variant="contained"
                 color="primary"

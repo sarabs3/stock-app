@@ -32,7 +32,7 @@ const TradesComponent = (props) => {
   useEffect(() => {
     if (userTrades.length === 0) return;
     updateTrades([...userTrades.filter((f) => !f.tradeDate)]);
-    showTodayTrades([...userTrades.filter((f) => !f.tradeDate)]);
+    // showTodayTrades([...userTrades.filter((f) => !f.tradeDate)]);
   }, [userTrades]);
   const deleteTrade = async (id) => {
     const modelToDelete = await DataStore.query(UserTrades, id);
@@ -48,12 +48,9 @@ const TradesComponent = (props) => {
     updateTodayTrades(trades.filter((f) => f.createdDate === value));
   };
   const classes = useStyles();
-  //const tradeDate=props.location.state.date
   const getRows = () => {
     if (showDayTrade) {
-     // console.log("todayTrades", todayTrades);
       if (todayTrades.length>0) {
-
         return todayTrades.length>0 && todayTrades.map((row, index) => {
           return {
             id: index+1,
@@ -83,7 +80,6 @@ const TradesComponent = (props) => {
         target: row.target,
         totalAmount: row.totalAmount,
         expectedProft: row.expectedProft,
-        
       };
     }); 
   };
@@ -248,12 +244,11 @@ const TradesComponent = (props) => {
                 
               />
               
-              <div style={{ height: 400, width: "100%" }}>
+              <div style={{ height: 700, width: "100%" }}>
                 <DataGrid
                   rows={getRows()}
                   columns={columns}
-                  pageSize={5}
-                 // checkboxSelection
+                  pageSize={12}
                   disableSelectionOnClick
                   onRowClick={({row}) => history.push(`trades/${row?.key}`)}
                 />
@@ -277,13 +272,3 @@ const TradesComponent = (props) => {
 
 export default TradesComponent;
 
-                            
-                              
-                                   
-                                           
-                                          
-                                       
-                                        
-                                   
-                             
-                                       
