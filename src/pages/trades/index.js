@@ -28,17 +28,19 @@ const TradesComponent = (props) => {
   const [showDayTrade, updateDayTrade] = useState(false);
   const [trades, updateTrades] = useState([]);
   const userTrades = useTrade();
+  const tradeDate = props.location?.state?.date;
 
   useEffect(() => {
     if (userTrades.length === 0) return;
+    if (tradeDate) {
+      updateDayTrade(true);
+      updateTodayTrades(userTrades.filter((f) => {
+        return f.createdDate === tradeDate
+      }));
+    }
     updateTrades([...userTrades.filter((f) => !f.tradeDate)]);
-    // showTodayTrades([...userTrades.filter((f) => !f.tradeDate)]);
-  }, [userTrades]);
-  const deleteTrade = async (id) => {
-    const modelToDelete = await DataStore.query(UserTrades, id);
-    DataStore.delete(modelToDelete);
-    window.location.reload();
-  };
+  }, [userTrades, tradeDate]);
+
 
   const handleClose = () => {
     setOpen(false);
@@ -147,15 +149,7 @@ const TradesComponent = (props) => {
     },
   ];
   
-  const tradeDate = props.location?.state?.date;
 
-  useEffect(() => {
-    if (tradeDate) {
-      updateTodayTrades(userTrades.filter((f) => {
-        return f.createdDate === tradeDate
-      }));
-    }
-  }, [tradeDate, userTrades]);
 
   const showTodayTrades = (loadedTrades) => {
     updateDayTrade(true);
@@ -224,13 +218,6 @@ const TradesComponent = (props) => {
               >
                 Add Trade
               </Button>
-              <Button
-                onClick={() => props.history.push("/trade/completed")}
-                variant="contained"
-              >
-                View Completed Trade
-              </Button>
-              <Button onClick={showTodayTrades}>Today Orders</Button>
               <TextField
                 label="Created Date"
                 type="date"

@@ -39,7 +39,7 @@ const CompletedTrades = (props) => {
   useEffect(() => {
     if (userTrades.length === 0) return;
     updateTrades([...userTrades.filter((f) => f.tradeDate)]);
-    showTodayTrades([...userTrades.filter((f) => f.tradeDate)]);
+    // showTodayTrades([...userTrades.filter((f) => f.tradeDate)]);
   }, [userTrades]);
 
   const handleClose = () => {
@@ -94,27 +94,11 @@ const CompletedTrades = (props) => {
         <Grid container spacing={3}>
           <Grid item xs={12} md={8} lg={12}>
             <Paper>
-              <Title>Recent Trades</Title>
-              <Button
-                className={classes.button}
-                onClick={() => props.history.push("/trade/add")}
-                variant="contained"
-                color="primary"
-              >
-                Add Trade
-              </Button>
-              <Button
-                onClick={() => props.history.push("/trade")}
-                variant="contained"
-              >
-                View Trades
-              </Button>
-              <Button onClick={showTodayTrades}>Today Orders</Button>
+              <Title>Completed Trades</Title>
               <TextField
-                label="Created Date"
+                label="Traded Date"
                 type="date"
                 name="createdDate"
-                defaultValue={moment().format("yyyy-MM-DD")}
                 className={classes.textField}
                 InputLabelProps={{
                   shrink: true,
