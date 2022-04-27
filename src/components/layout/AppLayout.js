@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
@@ -10,10 +10,8 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems } from '../listItems';
 import { Auth } from 'aws-amplify'
 import { Button } from '@material-ui/core';
@@ -104,12 +102,20 @@ const useStyles = makeStyles((theme) => ({
 
 const AppLayout = (props) => {
   const history = useHistory();
+  const [user, setUser] = useState('');
   
     const classes = useStyles();
     const [open, setOpen] = useState(true);
     const handleDrawerOpen = () => {
       setOpen(true);
     };
+    useEffect(() => {
+      async function getUser() {
+        const user = await Auth.currentAuthenticatedUser();
+        setUser(user.username);
+      }
+      getUser();
+    }, []);
     const handleDrawerClose = () => {
       setOpen(false);
     };
@@ -135,9 +141,9 @@ const AppLayout = (props) => {
             {props.pageName}
             </Typography>
             <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-            </Badge>
+              <Typography>
+                Welcome {user}
+              </Typography>
             </IconButton>
             <Button variant="text" color="default" onClick={signOut}>Sign out</Button>
         </Toolbar>
