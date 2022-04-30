@@ -5,6 +5,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PeopleIcon from '@material-ui/icons/People';
+import ReportsIcon from '@material-ui/icons/Receipt';
 import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
 import { Link } from 'react-router-dom';
 
@@ -33,6 +34,12 @@ export const mainListItems = (
         <PeopleIcon />
       </ListItemIcon>
       <ListItemText primary="Open Positions" />
+    </ListItem>
+    <ListItem button to="/reports" component={Link}>
+      <ListItemIcon>
+        <ReportsIcon />
+      </ListItemIcon>
+      <ListItemText primary="Reports" />
     </ListItem>
     <ListItem button component={Link} to="/scrips/add">
       <ListItemIcon>

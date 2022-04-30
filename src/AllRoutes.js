@@ -9,6 +9,7 @@ import ScripTrade from "./pages/scrips/ScripTrade";
 import CompletedTrades from "./pages/trades/CompletedTrades";
 import CompleteTrade from "./pages/trades/CompleteTrade";
 import ViewTrade from './pages/trades/ViewTrade';
+import Reports from './pages/Reports';
 
 function AllRoutes() {
   return (
@@ -23,6 +24,7 @@ function AllRoutes() {
       <Route path="/trade/:id" component={ScripTrade} />
       <Route path="/login" component={Login} />
       <Route path="/dashboard" component={Dashboard} />
+      <Route path="/reports" component={Reports} />
       <Route path="/" component={Login} />
     </Switch>
   );
